@@ -1,0 +1,14 @@
+E:\FPT University\Spring 2023\PRM392\Mobile-Triolingo\API.Core\bin\Debug\net6.0\API.Core.deps.json
+E:\FPT University\Spring 2023\PRM392\Mobile-Triolingo\API.Core\bin\Debug\net6.0\API.Core.runtimeconfig.json
+E:\FPT University\Spring 2023\PRM392\Mobile-Triolingo\API.Core\bin\Debug\net6.0\API.Core.dll
+E:\FPT University\Spring 2023\PRM392\Mobile-Triolingo\API.Core\bin\Debug\net6.0\API.Core.pdb
+E:\FPT University\Spring 2023\PRM392\Mobile-Triolingo\API.Core\obj\Debug\net6.0\API.Core.csproj.AssemblyReference.cache
+E:\FPT University\Spring 2023\PRM392\Mobile-Triolingo\API.Core\obj\Debug\net6.0\API.Core.GeneratedMSBuildEditorConfig.editorconfig
+E:\FPT University\Spring 2023\PRM392\Mobile-Triolingo\API.Core\obj\Debug\net6.0\API.Core.AssemblyInfoInputs.cache
+E:\FPT University\Spring 2023\PRM392\Mobile-Triolingo\API.Core\obj\Debug\net6.0\API.Core.AssemblyInfo.cs
+E:\FPT University\Spring 2023\PRM392\Mobile-Triolingo\API.Core\obj\Debug\net6.0\API.Core.csproj.CoreCompileInputs.cache
+E:\FPT University\Spring 2023\PRM392\Mobile-Triolingo\API.Core\obj\Debug\net6.0\API.Core.dll
+E:\FPT University\Spring 2023\PRM392\Mobile-Triolingo\API.Core\obj\Debug\net6.0\refint\API.Core.dll
+E:\FPT University\Spring 2023\PRM392\Mobile-Triolingo\API.Core\obj\Debug\net6.0\API.Core.pdb
+E:\FPT University\Spring 2023\PRM392\Mobile-Triolingo\API.Core\obj\Debug\net6.0\API.Core.genruntimeconfig.cache
+E:\FPT University\Spring 2023\PRM392\Mobile-Triolingo\API.Core\obj\Debug\net6.0\ref\API.Core.dll
