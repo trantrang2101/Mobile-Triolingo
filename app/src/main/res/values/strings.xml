@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">Triolingo_Mobile</string>
+    <string name="lesson_close">lesson_close</string>
+    <string name="lesson_correct">Correct !</string>
+    <string name="lesson_incorrect">Incorrect !</string>
+    <string name="lesson_correct_ans">Correct Answer: </string>
+    <string name="btn_continue">CONTINUE</string>
+    <string name="btn_check">CHECK</string>
+    <string name="btn_quit">QUIT</string>
+    <string name="btn_cancel">CANCEL</string>
+    <string name="lesson_close_text"><b>Are you sure you want to quit ?</b>\nAll progress in this lesson will be lost.</string>
 </resources>
