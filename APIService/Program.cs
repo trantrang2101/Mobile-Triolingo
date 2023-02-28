@@ -1,3 +1,8 @@
+using API.Core.DataAccess;
+using API.Core.Service.Interface;
+using API.Core.Service.Services;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -6,7 +11,13 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
+var configuration = builder.Configuration;
+string connectionString = configuration.GetConnectionString("TriolingoConStr");
+builder.Services.AddDbContext<TriolingoDbContext>(options =>
+        options.UseSqlServer(connectionString));
+#region regiter DI service
+builder.Services.AddTransient<ICourseService, CourseService>();
+#endregion
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
