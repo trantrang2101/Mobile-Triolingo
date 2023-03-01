@@ -1,5 +1,7 @@
 ﻿using API.Core.Entity;
 using API.Core.Service.Interface;
+using API.Core.Service.Interface.Courses;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,11 +17,12 @@ namespace APIService.Controllers.Courses
             _courseService = courseService;
         }
         [HttpGet]
+        [Authorize]
         public IActionResult GetAllCourse()
         {
             try
             {
-                return Ok(_courseService.GetAllCourses());
+                return Ok(_courseService.GetAllCourse());
             }
             catch (Exception ex)
             {
@@ -28,11 +31,12 @@ namespace APIService.Controllers.Courses
             }
         }
         [HttpPost]
+        [Authorize(Roles ="Admin")]
         public async Task<IActionResult> AddCourse(Course co)
         {
             try
             {
-                if (await _courseService.CreateCourse(co))
+                if (await _courseService.AddNewCourse(co)>0)
                     return Ok(co);
                 else return BadRequest();
             }
@@ -43,11 +47,12 @@ namespace APIService.Controllers.Courses
             }
         }
         [HttpPut]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateCourse(Course co)
         {
             try
             {
-                if (await _courseService.UpdateCourse(co))
+                if (await _courseService.EditCourse(co))
                     return NoContent();
                 else return BadRequest();
             }
@@ -57,19 +62,19 @@ namespace APIService.Controllers.Courses
                 throw;
             }
         }
-        [HttpDelete("id")]
-        public async Task<IActionResult> DeleteCourse(int coId)
-        {
-            try
-            {
-                if (await _courseService.DeleteCourse(coId)) return Ok();
-                else return BadRequest();
-            }
-            catch(Exception ex)
-            {
-                return BadRequest(ex.Message);
-                throw;
-            }
-        }
+        //[HttpDelete("id")]
+        //public async Task<IActionResult> DeleteCourse(int coId)
+        //{
+        //    try
+        //    {
+        //        if (await _courseService.DeleteCourse(coId)) return Ok();
+        //        else return BadRequest();
+        //    }
+        //    catch(Exception ex)
+        //    {
+        //        return BadRequest(ex.Message);
+        //        throw;
+        //    }
+        //}
     }
 }
