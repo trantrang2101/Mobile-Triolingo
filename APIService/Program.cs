@@ -1,4 +1,3 @@
-using API.Core.DataAccess;
 using API.Core.Service.Service.Courses;
 using API.Core.Service.Service.Exercises;
 using API.Core.Service.Interface.Courses;
@@ -23,10 +22,10 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-var configuration = builder.Configuration;
-string connectionString = configuration.GetConnectionString("TriolingoConStr");
-builder.Services.AddDbContext<TriolingoDbContext>(options =>
-        options.UseSqlServer(connectionString));
+//var configuration = builder.Configuration;
+//string connectionString = configuration.GetConnectionString("TriolingoConStr");
+//builder.Services.AddDbContext<TriolingoDbContext>(options =>
+//        options.UseSqlServer(connectionString));
 #region regiter DI service
 // builder.Services.AddTransient<IExercise, ExerciseService>();
 // builder.Services.AddTransient<IAnswer, AnswerService>();
