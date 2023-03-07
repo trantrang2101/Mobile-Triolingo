@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using API.Core.Configuration;
 using API.Core.Entity;
+using Microsoft.Extensions.Options;
 
 namespace API.Core.DataAccess
 {
@@ -31,18 +32,19 @@ namespace API.Core.DataAccess
             modelBuilder.ApplyConfiguration(new StudentLessonConfiguration());
             modelBuilder.ApplyConfiguration(new ExerciseConfiguration());
         }
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+
+        protected override void OnConfiguring(DbContextOptionsBuilder options)
         {
-            base.OnConfiguring(optionsBuilder);
-            //if (!optionsBuilder.IsConfigured)
-            //{
-            //    var config = new ConfigurationBuilder()
-            //        .SetBasePath(Directory.GetCurrentDirectory())
-            //        .AddJsonFile("appsettings.json")
-            //        .Build();
-            //    optionsBuilder.UseSqlServer(config.GetConnectionString("TriolingoConStr"));
-            //}
+            if (!options.IsConfigured)
+            {
+                var config = new ConfigurationBuilder()
+                    .SetBasePath(Directory.GetCurrentDirectory())
+                    .AddJsonFile("appsettings.json")
+                    .Build();
+                options.UseSqlServer(config.GetConnectionString("TriolingoConStr"));
+            }
         }
+
         #region Entity
         public DbSet<Setting> Settings { get; set; }
         public DbSet<User> Users { get; set; }
