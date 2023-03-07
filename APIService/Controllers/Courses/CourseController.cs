@@ -16,8 +16,7 @@ namespace APIService.Controllers.Courses
         {
             _courseService = courseService;
         }
-        [HttpGet]
-        [Authorize]
+        [HttpGet("get")]
         public IActionResult GetAllCourse()
         {
             try
@@ -30,9 +29,24 @@ namespace APIService.Controllers.Courses
                 throw;
             }
         }
-        [HttpPost]
-        [Authorize(Roles ="Admin")]
-        public async Task<IActionResult> AddCourse(Course co)
+        [HttpGet("detail/{id}")]
+
+        public async Task<IActionResult> GetCourse(int id)
+        {
+            try
+            {
+                var course = await _courseService.GetCourseById(id);
+                return Ok(course);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+                throw;
+            }
+        }
+
+        [HttpPost("add")]
+        public async Task<IActionResult> AddCourse([FromBody] Course co)
         {
             try
             {
@@ -46,9 +60,8 @@ namespace APIService.Controllers.Courses
                 throw;
             }
         }
-        [HttpPut]
-        [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> UpdateCourse(Course co)
+        [HttpPut("update")]
+        public async Task<IActionResult> UpdateCourse([FromBody] Course co)
         {
             try
             {
