@@ -30,6 +30,7 @@ namespace API.Core.DataAccess
             modelBuilder.ApplyConfiguration(new AnswerConfiguration());
             modelBuilder.ApplyConfiguration(new StudentLessonConfiguration());
             modelBuilder.ApplyConfiguration(new ExerciseConfiguration());
+            modelBuilder.Entity<Course>().HasData(new Course { Name = "Demo course1", Description = "Test data", RateAverage = 4, Note = "Test note", Status = 1 });
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
