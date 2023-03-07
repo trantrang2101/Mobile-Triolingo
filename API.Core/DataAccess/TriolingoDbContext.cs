@@ -33,6 +33,7 @@ namespace API.Core.DataAccess
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+            base.OnConfiguring(optionsBuilder);
             if (!optionsBuilder.IsConfigured)
             {
                 var config = new ConfigurationBuilder()
