@@ -34,14 +34,14 @@ namespace API.Core.DataAccess
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
-            if (!optionsBuilder.IsConfigured)
-            {
-                var config = new ConfigurationBuilder()
-                    .SetBasePath(Directory.GetCurrentDirectory())
-                    .AddJsonFile("appsettings.json")
-                    .Build();
-                optionsBuilder.UseSqlServer(config.GetConnectionString("TriolingoConStr"));
-            }
+            //if (!optionsBuilder.IsConfigured)
+            //{
+            //    var config = new ConfigurationBuilder()
+            //        .SetBasePath(Directory.GetCurrentDirectory())
+            //        .AddJsonFile("appsettings.json")
+            //        .Build();
+            //    optionsBuilder.UseSqlServer(config.GetConnectionString("TriolingoConStr"));
+            //}
         }
         #region Entity
         public DbSet<Setting> Settings { get; set; }
