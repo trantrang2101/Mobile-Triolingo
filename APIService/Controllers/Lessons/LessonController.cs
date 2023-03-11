@@ -33,7 +33,19 @@ namespace APIService.Controllers.Lessons
                 {
                     return Ok("Nothing in list");
                 }
-                return Ok(list);
+                List<LessonModel> result = new List<LessonModel>();
+                foreach (var item in list)
+                {
+                    result.Add(new LessonModel()
+                    {
+                        Id = item.Id,
+                        Name = item.Name,
+                        Description = item.Description,
+                        Note = item.Note,
+                        UnitId  = unitId,
+                    });
+                }
+                return Ok(result);
             }
             catch (Exception ex)
             {
