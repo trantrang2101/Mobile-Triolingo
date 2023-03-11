@@ -2,7 +2,12 @@ package com.example.triolingo_mobile;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.triolingo_mobile.Model.UserModel;
+import com.google.gson.Gson;
+
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -74,10 +79,17 @@ public class LoginActivity extends AppCompatActivity {
     public void LoginBtn(View v) {
         String UserName = InputUsername.getText().toString().trim();
         String Password = InputPassword.getText().toString().trim();
-        if (!UserName.equals("admin") && !Password.equals("admin")) {
+        UserModel userLogin = new UserModel(UserName, Password);
+        if (!UserName.equals("admin") && !Password.equals("aadmin")) {
             InputUsername.setError("Username or Password not correct");
         } else {
-            Intent switchActivityIntent = new Intent(this, QuestionChoiceActivity.class);
+            Gson gson = new Gson();
+            String userJson = gson.toJson(userLogin);
+            SharedPreferences sharedPref = getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.putString("user", userJson);
+            editor.apply();
+            Intent switchActivityIntent = new Intent(this, AccountActivity.class);
             startActivity(switchActivityIntent);
             Toast.makeText(this, "Login successfully...", Toast.LENGTH_SHORT).show();
         }
