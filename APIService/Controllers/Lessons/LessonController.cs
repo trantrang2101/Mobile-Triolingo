@@ -4,6 +4,7 @@ using API.Core.Service.Interface.Units;
 using APIService.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.RegularExpressions;
 
 namespace APIService.Controllers.Lessons
 {
@@ -18,17 +19,30 @@ namespace APIService.Controllers.Lessons
             _lessonService = lessonService;
             _unitService = unitService;
         }
-        [HttpGet("get/{unitId}")]
-        public async Task<IActionResult> GetLessonsByUnitId(int unitId)
+        [HttpPost("get/(filter)")]
+        public async Task<IActionResult> GetLessonsByUnitId(string? filter = "")
         {
             try
             {
-                var unit = await _unitService.GetById(unitId);
-                if (unit == null)
+                List<Lesson> list = new List<Lesson>();
+                if (!String.IsNullOrEmpty(filter))
                 {
-                    return NotFound();
+                    var match = Regex.Match(filter, @"id==(\d+)");
+                    if (match.Success)
+                    {
+                        var id = int.Parse(match.Groups[1].Value);
+                        var unit = await _unitService.GetById(id);
+                        if (unit == null)
+                        {
+                            return NotFound();
+                        }
+                        list = await _lessonService.getAllLessonsByUnitId(id);
+                    }
                 }
-                var list = await _lessonService.getAllLessonsByUnitId(unitId);
+                else
+                {
+                    list = await _lessonService.GetAllLesson();
+                }
                 if (list.Count == 0)
                 {
                     return Ok("Nothing in list");
@@ -42,7 +56,7 @@ namespace APIService.Controllers.Lessons
                         Name = item.Name,
                         Description = item.Description,
                         Note = item.Note,
-                        UnitId  = unitId,
+                        Status = item.Status
                     });
                 }
                 return Ok(result);
@@ -64,6 +78,7 @@ namespace APIService.Controllers.Lessons
                     UnitId = lesson.UnitId,
                     Description = lesson.Description,
                     Note = lesson.Note,
+                    Status = 1
                 };
                 if (await _lessonService.AddLesson(le))
                 {
