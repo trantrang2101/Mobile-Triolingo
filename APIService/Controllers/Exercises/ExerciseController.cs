@@ -16,7 +16,7 @@ namespace APIService.Controllers.Exercises
             _courseService = courseService;
         }
         [HttpGet("get")]
-        public IActionResult GetAllExercise()
+        public IActionResult GetAllExercise(string? filter = "")
         {
             try
             {
