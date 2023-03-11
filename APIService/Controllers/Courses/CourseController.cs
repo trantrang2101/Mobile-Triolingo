@@ -17,11 +17,12 @@ namespace APIService.Controllers.Courses
             _courseService = courseService;
         }
         [HttpGet("get")]
-        public IActionResult GetAllCourse()
+        public async Task<IActionResult> GetAllCourse()
         {
             try
             {
-                return Ok(_courseService.GetAllCourse());
+                var list = await _courseService.GetAllCourse();
+                return Ok(list);
             }
             catch (Exception ex)
             {
