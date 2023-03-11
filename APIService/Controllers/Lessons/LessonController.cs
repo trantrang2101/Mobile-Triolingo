@@ -29,6 +29,10 @@ namespace APIService.Controllers.Lessons
                     return NotFound();
                 }
                 var list = await _lessonService.getAllLessonsByUnitId(unitId);
+                if (list.Count == 0)
+                {
+                    return Ok("Nothing in list");
+                }
                 return Ok(list);
             }
             catch (Exception ex)

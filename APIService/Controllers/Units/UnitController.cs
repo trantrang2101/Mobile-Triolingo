@@ -29,6 +29,10 @@ namespace APIService.Controllers.Units
                     return NotFound();
                 }
                 var list = await _unitService.GetUnitsByCourseId(courseId);
+                if (list.Count == 0)
+                {
+                    return Ok("Nothing in list");
+                }
                 return Ok(list);
             }
             catch (Exception ex) 
