@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".RegisterActivity">
+
+    <TextView
+        android:id="@+id/register_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:fontFamily="sans-serif-medium"
+        android:text="Register new Account"
+        android:textAlignment="center"
+        android:textColor="#000000"
+        android:textSize="34sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:contentDescription="Go back"
+        android:maxWidth="50dp"
+        android:maxHeight="50dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="?attr/actionModeCloseDrawable" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="64dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/textView5"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/register_text">
+
+        <EditText
+            android:id="@+id/editTextTextEmailAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/custom_edittext_back"
+            android:ems="10"
+            android:fontFamily="sans-serif-medium"
+            android:hint="Email"
+            android:inputType="textEmailAddress"
+            android:linksClickable="false"
+            android:paddingStart="20dp"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp" />
+
+        <EditText
+            android:id="@+id/editTextTextPersonName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/custom_edittext_back"
+            android:ems="10"
+            android:fontFamily="sans-serif-medium"
+            android:hint="Họ tên"
+            android:inputType="textPersonName"
+            android:paddingStart="20dp"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp" />
+
+        <EditText
+            android:id="@+id/editTextTextPassword2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/custom_edittext_back"
+            android:ems="10"
+            android:fontFamily="sans-serif-medium"
+            android:hint="Mật khẩu"
+            android:inputType="textPassword"
+            android:paddingStart="20dp"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp" />
+
+        <EditText
+            android:id="@+id/editTextTextPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/custom_edittext_back"
+            android:ems="10"
+            android:fontFamily="sans-serif-medium"
+            android:hint="Nhập lại mật khẩu"
+            android:inputType="textPassword"
+            android:paddingStart="20dp"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
+            tools:ignore="TextContrastCheck" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/custom_btn_register"
+            android:backgroundTint="#0099FF"
+            android:backgroundTintMode="multiply"
+            android:fontFamily="sans-serif-medium"
+            android:letterSpacing="0.1"
+            android:paddingTop="10dp"
+            android:paddingBottom="15dp"
+            android:text="Đăng ký"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="By registering an account on Triolingo, you are agreed to all of our FAQ "
+        android:textAlignment="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>
