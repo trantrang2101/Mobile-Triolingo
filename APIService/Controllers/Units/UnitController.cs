@@ -24,7 +24,7 @@ namespace APIService.Controllers.Units
             try
             {
                 var course = await _courseService.GetCourseById(courseId);
-                if (course == null) 
+                if (course == null)
                 {
                     return NotFound();
                 }
@@ -33,9 +33,22 @@ namespace APIService.Controllers.Units
                 {
                     return Ok("Nothing in list");
                 }
-                return Ok(list);
+                List<UnitModel> result = new List<UnitModel>();
+                foreach (var unit in list)
+                {
+                    result.Add(new UnitModel()
+                    {
+                        CourseId = courseId,
+                        Id = unit.Id,
+                        Name = unit.Name,
+                        Description = unit.Description,
+                        Note = unit.Note,
+                        Order = unit.Order,
+                    });
+                }
+                return Ok(result);
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
                 throw;
