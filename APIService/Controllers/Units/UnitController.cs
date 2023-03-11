@@ -20,7 +20,7 @@ namespace APIService.Controllers.Units
             _unitService = unitService;
             _courseService = courseService;
         }
-        [HttpPost("get/(filter)")]
+        [HttpPost("get")]
         public async Task<IActionResult> GetUnitsByCourseId(string? filter = "")
         {
             try

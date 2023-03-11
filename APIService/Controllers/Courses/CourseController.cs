@@ -17,7 +17,7 @@ namespace APIService.Controllers.Courses
             _courseService = courseService;
         }
         [HttpGet("get")]
-        public async Task<IActionResult> GetAllCourse()
+        public async Task<IActionResult> GetAllCourse(string? filter = "")
         {
             try
             {
