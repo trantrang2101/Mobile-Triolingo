@@ -14,25 +14,26 @@ namespace API.Core.Service.Service.Units
         }
         public async Task<bool> AddUnit(Unit unit)
         {
+            unit.Status = 1;
             await _dbContext.Units.AddAsync(unit);
             await _dbContext.SaveChangesAsync();
             return true;
         }
 
-        public List<Unit> GetAll()
+        public async Task<List<Unit>> GetAll()
         {
-            return _dbContext.Units.ToList();
+            return await _dbContext.Units.ToListAsync();
         }
 
-        public Unit GetById(int? unitId)
+        public async Task<Unit> GetById(int? unitId)
         {
-            return _dbContext.Units.Where(x => x.Id == unitId).FirstOrDefault();
+            return await _dbContext.Units.Where(x => x.Id == unitId).FirstOrDefaultAsync();
         }
 
-        public List<Unit> GetUnitsByCourseId(int? courseId)
+        public async Task<List<Unit>> GetUnitsByCourseId(int? courseId)
         {
             List<Unit> units = new List<Unit>();
-            units = _dbContext.Units.Where(x => x.CourseId == courseId).ToList();
+            units = await _dbContext.Units.Where(x => x.CourseId == courseId).ToListAsync();
             return units;
         }
 

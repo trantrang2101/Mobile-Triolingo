@@ -1,14 +1,16 @@
-package com.example.triolingo_mobile;
+package com.example.triolingo_mobile.Units;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
-public class MainActivity extends AppCompatActivity {
+import com.example.triolingo_mobile.R;
+
+public class LessonProgress extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_lesson_progress);
     }
 }

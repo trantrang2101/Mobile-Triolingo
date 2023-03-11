@@ -15,9 +15,8 @@ namespace APIService.Controllers.Exercises
         {
             _courseService = courseService;
         }
-        [HttpGet]
-        [Authorize]
-        public IActionResult GetAllExercise()
+        [HttpGet("get")]
+        public IActionResult GetAllExercise(string? filter = "")
         {
             try
             {
@@ -29,8 +28,24 @@ namespace APIService.Controllers.Exercises
                 throw;
             }
         }
-        [HttpPost]
-        public async Task<IActionResult> AddExercise(Exercise co)
+
+        [HttpGet("detail/{id}")]
+        public async Task<IActionResult> GetExercise(int id)
+        {
+            try
+            {
+                var ex = await _courseService.GetExerciseById(id);
+                return Ok(ex);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+                throw;
+            }
+        }
+
+        [HttpPost("add")]
+        public async Task<IActionResult> AddExercise([FromBody] Exercise co)
         {
             try
             {
@@ -44,8 +59,8 @@ namespace APIService.Controllers.Exercises
                 throw;
             }
         }
-        [HttpPut]
-        public async Task<IActionResult> UpdateExercise(Exercise co)
+        [HttpPut("update")]
+        public async Task<IActionResult> UpdateExercise([FromBody] Exercise co)
         {
             try
             {
@@ -59,7 +74,7 @@ namespace APIService.Controllers.Exercises
                 throw;
             }
         }
-        [HttpDelete("id")]
+        [HttpDelete("delete/{coId}")]
         public async Task<IActionResult> DeleteCourse(int coId)
         {
             try

@@ -28,14 +28,14 @@ string connectionString = configuration.GetConnectionString("TriolingoConStr");
 builder.Services.AddDbContext<TriolingoDbContext>(options =>
         options.UseSqlServer(connectionString));
 #region regiter DI service
-// builder.Services.AddTransient<IExercise, ExerciseService>();
-// builder.Services.AddTransient<IAnswer, AnswerService>();
-// builder.Services.AddTransient<IQuestion, QuestionService>();
-// builder.Services.AddTransient<ICourseService, CourseService>();
-// builder.Services.AddTransient<ISettingService, SettingService>();
-// builder.Services.AddTransient<ILessonService, LessonService>();
-// builder.Services.AddTransient<IUserService, UserService>();
-// builder.Services.AddTransient<IUnitService, UnitService>();
+builder.Services.AddTransient<IExercise, ExerciseService>();
+builder.Services.AddTransient<IAnswer, AnswerService>();
+builder.Services.AddTransient<IQuestion, QuestionService>();
+builder.Services.AddTransient<ICourseService, CourseService>();
+builder.Services.AddTransient<ISettingService, SettingService>();
+builder.Services.AddTransient<ILessonService, LessonService>();
+builder.Services.AddTransient<IUserService, UserService>();
+builder.Services.AddTransient<IUnitService, UnitService>();
 #endregion
 var app = builder.Build();
 
