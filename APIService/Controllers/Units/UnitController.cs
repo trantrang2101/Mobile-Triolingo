@@ -4,6 +4,8 @@ using API.Core.Service.Interface.Units;
 using APIService.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.RegularExpressions;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace APIService.Controllers.Units
 {
@@ -18,17 +20,30 @@ namespace APIService.Controllers.Units
             _unitService = unitService;
             _courseService = courseService;
         }
-        [HttpGet("get/{courseId}")]
-        public async Task<IActionResult> GetUnitsByCourseId(int courseId)
+        [HttpPost("get/(filter)")]
+        public async Task<IActionResult> GetUnitsByCourseId(string? filter = "")
         {
             try
             {
-                var course = await _courseService.GetCourseById(courseId);
-                if (course == null)
+                List<Unit> list = new List<Unit>();
+                if (!String.IsNullOrEmpty(filter))
                 {
-                    return NotFound();
+                    var match = Regex.Match(filter, @"id==(\d+)");
+                    if (match.Success)
+                    {
+                        var id = int.Parse(match.Groups[1].Value);
+                        var course = await _courseService.GetCourseById(id);
+                        if (course == null)
+                        {
+                            return NotFound();
+                        }
+                        list = await _unitService.GetUnitsByCourseId(id);
+                    }
                 }
-                var list = await _unitService.GetUnitsByCourseId(courseId);
+                else
+                {
+                    list = await _unitService.GetAll();
+                }
                 if (list.Count == 0)
                 {
                     return Ok("Nothing in list");
@@ -38,7 +53,6 @@ namespace APIService.Controllers.Units
                 {
                     result.Add(new UnitModel()
                     {
-                        CourseId = courseId,
                         Id = unit.Id,
                         Name = unit.Name,
                         Description = unit.Description,
@@ -46,6 +60,7 @@ namespace APIService.Controllers.Units
                         Order = unit.Order,
                     });
                 }
+
                 return Ok(result);
             }
             catch (Exception ex)

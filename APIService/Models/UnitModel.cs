@@ -9,5 +9,6 @@ namespace APIService.Models
         public int Order { get; set; }
         public int CourseId { get; set; }
         public string? Note { get; set; }
+        public int Status { get; set; }
     }
 }
