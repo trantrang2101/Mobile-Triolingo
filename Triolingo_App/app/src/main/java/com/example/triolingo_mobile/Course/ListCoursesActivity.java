@@ -9,13 +9,16 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.triolingo_mobile.API.APICourse;
 import com.example.triolingo_mobile.API.RetrofitClient;
+import com.example.triolingo_mobile.DataAccess.DbContext;
 import com.example.triolingo_mobile.Model.Course;
 import com.example.triolingo_mobile.R;
 
 import java.io.IOException;
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,10 +27,12 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ListCoursesActivity extends AppCompatActivity {
+    Connection connect;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_courses);
+        GetText();
         APICourse apiService = RetrofitClient.getRetrofitInstance().create(APICourse.class);
         Call<List<Course>> call = apiService.getList();
         call.enqueue(new Callback<List<Course>>() {
@@ -71,5 +76,13 @@ public class ListCoursesActivity extends AppCompatActivity {
                 System.out.println(-1);
             }
         });
+    }
+    public void GetText() {
+        DbContext db = new DbContext();
+        connect = db.ConnectionClass();
+        if (connect != null) {
+            TextView tv = findViewById(R.id.connectDb);
+            tv.setText("Con me may");
+        }
     }
 }
