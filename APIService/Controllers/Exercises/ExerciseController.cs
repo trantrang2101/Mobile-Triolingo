@@ -1,5 +1,5 @@
-﻿using API.Core.Entity;
-using API.Core.Service.Interface.Exercises;
+﻿using APIService.Entity;
+using APIService.Service.Interface.Exercises;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Data;
