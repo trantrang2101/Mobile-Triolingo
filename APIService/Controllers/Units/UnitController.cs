@@ -1,6 +1,6 @@
-﻿using API.Core.Entity;
-using API.Core.Service.Interface.Courses;
-using API.Core.Service.Interface.Units;
+﻿using APIService.Entity;
+using APIService.Service.Interface.Courses;
+using APIService.Service.Interface.Units;
 using APIService.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

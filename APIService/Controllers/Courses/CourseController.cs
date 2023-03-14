@@ -1,6 +1,6 @@
-﻿using API.Core.Entity;
-using API.Core.Service.Interface;
-using API.Core.Service.Interface.Courses;
+﻿using APIService.Entity;
+using APIService.Service.Interface;
+using APIService.Service.Interface.Courses;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

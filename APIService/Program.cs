@@ -1,18 +1,18 @@
-using API.Core.DataAccess;
-using API.Core.Service.Service.Courses;
-using API.Core.Service.Service.Exercises;
-using API.Core.Service.Interface.Courses;
-using API.Core.Service.Interface.Exercises;
-using API.Core.Service.Interface.Lessons;
-using API.Core.Service.Interface.QnA;
-using API.Core.Service.Interface.Settings;
-using API.Core.Service.Interface.Units;
-using API.Core.Service.Interface.Users;
-using API.Core.Service.Service.Lessons;
-using API.Core.Service.Service.QnA;
-using API.Core.Service.Service.Settings;
-using API.Core.Service.Service.Units;
-using API.Core.Service.Service.Users;
+using APIService.DataAccess;
+using APIService.Service.Service.Courses;
+using APIService.Service.Service.Exercises;
+using APIService.Service.Interface.Courses;
+using APIService.Service.Interface.Exercises;
+using APIService.Service.Interface.Lessons;
+using APIService.Service.Interface.QnA;
+using APIService.Service.Interface.Settings;
+using APIService.Service.Interface.Units;
+using APIService.Service.Interface.Users;
+using APIService.Service.Service.Lessons;
+using APIService.Service.Service.QnA;
+using APIService.Service.Service.Settings;
+using APIService.Service.Service.Units;
+using APIService.Service.Service.Users;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -40,7 +40,7 @@ builder.Services.AddTransient<IUnitService, UnitService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment()||app.Environment.IsProduction())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
