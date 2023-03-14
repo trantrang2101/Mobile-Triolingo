@@ -8,9 +8,23 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/list_courses"
-        android:layout_width="409dp"
-        android:layout_height="729dp"
+        android:layout_width="390dp"
+        android:layout_height="400dp"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/connectDb"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="55dp"
+        android:layout_marginTop="48dp"
+        android:layout_marginEnd="298dp"
+        android:layout_marginBottom="98dp"
+        android:text="TextView"
+        app:layout_constraintBottom_toTopOf="@+id/list_courses"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
