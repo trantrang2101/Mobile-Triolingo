@@ -28,6 +28,18 @@ public class Course {
         this.note = note;
     }
 
+    @Override
+    public String toString() {
+        return "Course{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", rateAverage=" + rateAverage +
+                ", status=" + status +
+                ", note='" + note + '\'' +
+                '}';
+    }
+
     public int getId() {
         return id;
     }
