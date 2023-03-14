@@ -11,7 +11,7 @@ public class DbContext {
     String username, pass, ip, port, database;
 
     public Connection ConnectionClass() {
-        ip = "192.168.1.40";
+        ip = "192.168.1.28";
         database = "TriolingoDatabase";
         username = "sa1";
         pass = "123456";
