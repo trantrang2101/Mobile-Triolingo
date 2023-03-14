@@ -19,8 +19,13 @@ import com.example.triolingo_mobile.R;
 
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.xml.transform.Result;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -81,8 +86,51 @@ public class ListCoursesActivity extends AppCompatActivity {
         DbContext db = new DbContext();
         connect = db.ConnectionClass();
         if (connect != null) {
+            String sql = "Select * from Course";
+            try {
+                Statement state = connect.createStatement();
+                ResultSet rs = state.executeQuery(sql);
+                List<Course> listResult = new ArrayList<>();
+                while (rs.next()) {
+                    Course c = new Course();
+                    c.setName(rs.getString("Name"));
+                    c.setDescription(rs.getString("Description"));
+                    c.setNote(rs.getString("Note"));
+                    c.setRateAverage(rs.getFloat("RateAverage"));
+                    c.setStatus(rs.getInt("Status"));
+                    c.setId(rs.getInt("Id"));
+                    listResult.add(c);
+                }
+                RecyclerView recyclerView = (RecyclerView)findViewById(R.id.list_courses);
+                RecyclerView.LayoutManager manager = new LinearLayoutManager(ListCoursesActivity.this);
+                recyclerView.setAdapter(new RecyclerView.Adapter<CourseHolder>(){
+                    @NonNull
+                    @Override
+                    public CourseHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_course, parent, false);
+                        CourseHolder viewHolder = new CourseHolder(v, parent.getContext());
+                        return viewHolder;
+                    }
+
+                    @Override
+                    public void onBindViewHolder(@NonNull CourseHolder holder, int position) {
+                        Course course = listResult.get(position);
+                        holder.setView(course);
+                    }
+
+                    @Override
+                    public int getItemCount() {
+                        return listResult.size();
+                    }
+                });
+                recyclerView.setLayoutManager(manager);
+                recyclerView.setVisibility(View.VISIBLE);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+
             TextView tv = findViewById(R.id.connectDb);
-            tv.setText("Con me may");
+            tv.setText("bO MAY CHAY DUOC ROI");
         }
     }
 }
