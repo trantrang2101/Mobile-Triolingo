@@ -9,16 +9,9 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 
 public class DbContext {
-    private static final String ip = "192.168.1.28";
-    private static final String database = "TriolingoDatabase";
-    private static final String username = "sa1";
-    private static final String pass = "123456";
-    private static final String port = "1433";
-    private static final String DB_URL = "jdbc:jtds:sqlserver://"+ ip + ":"
-            + port+";"+ "databasename="+ database+";user="
-            +username+";password="+pass+";allowPublicKeyRetrieval=true&autoReconnect=true&useSSL=false";
+    String username, pass, ip, port, database;
 
-    public Connection conn = getConnection();
+    public Connection conn = ConnectionClass();
 
     public ResultSet getData(String sql) {
         ResultSet rs = null;
@@ -50,14 +43,26 @@ public class DbContext {
         return te;
     }
 
-    public static Connection getConnection() {
-        Connection conn = null;
+    public Connection ConnectionClass() {
+        ip = "192.168.1.40";
+        database = "TriolingoDatabase";
+        username = "sa1";
+        pass = "123456";
+        port = "1433";
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+        Connection con = null;
+        String connectionURL = null;
         try {
             Class.forName("net.sourceforge.jtds.jdbc.Driver");
-            conn = DriverManager.getConnection(DB_URL);
-        } catch (Exception ex) {
+            connectionURL= "jdbc:jtds:sqlserver://"+ ip + ":"
+                    + port+";"+ "databasename="+ database+";user="
+                    +username+";password="+pass+";";
+            con = DriverManager.getConnection(connectionURL);
+        }
+        catch (Exception ex) {
             Log.e("Error:", ex.getMessage() );
         }
-        return conn;
+        return con;
     }
 }
