@@ -13,14 +13,20 @@ import android.widget.TextView;
 
 import com.example.triolingo_mobile.API.APICourse;
 import com.example.triolingo_mobile.API.RetrofitClient;
+import com.example.triolingo_mobile.DAO.CourseDAO;
 import com.example.triolingo_mobile.DataAccess.DbContext;
 import com.example.triolingo_mobile.Model.Course;
 import com.example.triolingo_mobile.R;
 
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.xml.transform.Result;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -33,56 +39,19 @@ public class ListCoursesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_courses);
         GetText();
-        APICourse apiService = RetrofitClient.getRetrofitInstance().create(APICourse.class);
-        Call<List<Course>> call = apiService.getList();
-        call.enqueue(new Callback<List<Course>>() {
-            @Override
-            public void onResponse(Call<List<Course>> call, Response<List<Course>> response) {
-                System.out.println(1);
-                if (response.isSuccessful()) {
-                    List<Course> list = response.body();
-                    RecyclerView recyclerView = (RecyclerView)findViewById(R.id.list_courses);
-                    RecyclerView.LayoutManager manager = new LinearLayoutManager(ListCoursesActivity.this);
-                    recyclerView.setAdapter(new RecyclerView.Adapter<CourseHolder>(){
-                        @NonNull
-                        @Override
-                        public CourseHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_course, parent, false);
-                            CourseHolder viewHolder = new CourseHolder(v, parent.getContext());
-                            return viewHolder;
-                        }
-
-                        @Override
-                        public void onBindViewHolder(@NonNull CourseHolder holder, int position) {
-                            Course course = list.get(position);
-                            holder.setView(course);
-                        }
-
-                        @Override
-                        public int getItemCount() {
-                            return list.size();
-                        }
-                    });
-                    recyclerView.setLayoutManager(manager);
-                    recyclerView.setVisibility(View.VISIBLE);
-                } else {
-                    System.out.println(0);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<Course>> call, Throwable t) {
-                t.printStackTrace();
-                System.out.println(-1);
-            }
-        });
     }
-    public void GetText() {
-        DbContext db = new DbContext();
-        connect = db.ConnectionClass();
-        if (connect != null) {
-            TextView tv = findViewById(R.id.connectDb);
-            tv.setText("Con me may");
+    public void GetText()
+    {
+        try {
+            List<Course> listResult = CourseDAO.getInstance().getList("Status>0");
+            RecyclerView recyclerView = (RecyclerView) findViewById(R.id.list_courses);
+            CourseAdapter adapter = new CourseAdapter(listResult);
+            RecyclerView.LayoutManager manager = new LinearLayoutManager(ListCoursesActivity.this);
+            recyclerView.setAdapter(adapter);
+            recyclerView.setLayoutManager(manager);
+            recyclerView.setVisibility(View.VISIBLE);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 }

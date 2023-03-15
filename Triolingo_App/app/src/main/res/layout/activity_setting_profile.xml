@@ -74,81 +74,77 @@
         android:layout_below="@id/rellay1">
 
         <LinearLayout
+            android:id="@+id/linearLayout2"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="10dp"
-            android:orientation="vertical">
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="32dp"
+            android:layout_marginBottom="64dp"
+            android:gravity="center"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toTopOf="@+id/unit_description"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/register_text">
 
-            <com.google.android.material.textfield.TextInputLayout
+            <EditText
+                android:id="@+id/editTextTextEmailAddress"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                android:textColorHint="@color/progressbar_process">
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/custom_edittext_back"
+                android:ems="10"
+                android:fontFamily="sans-serif-medium"
+                android:hint="Email"
+                android:inputType="textEmailAddress"
+                android:linksClickable="false"
+                android:paddingStart="20dp"
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp" />
 
-                <EditText
-                    android:id="@+id/editUserName"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Nhập tên người dùng"
-                    android:imeOptions="actionNext"
-                    android:inputType="textEmailAddress"
-                    android:textColorHint="@color/progressbar_process" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
+            <EditText
+                android:id="@+id/editTextTextPersonName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                android:textColorHint="@color/progressbar_process">
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/custom_edittext_back"
+                android:ems="10"
+                android:fontFamily="sans-serif-medium"
+                android:hint="Họ tên"
+                android:inputType="textPersonName"
+                android:paddingStart="20dp"
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp" />
 
-                <EditText
-                    android:id="@+id/editEmail"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Nhập email"
-                    android:imeOptions="actionNext"
-                    android:inputType="textEmailAddress"
-                    android:textColorHint="@color/colorPrimary" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-
-            <com.google.android.material.textfield.TextInputLayout
+            <EditText
+                android:id="@+id/editTextTextPassword2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                android:textColorHint="@color/progressbar_process">
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/custom_edittext_back"
+                android:ems="10"
+                android:fontFamily="sans-serif-medium"
+                android:hint="Mật khẩu"
+                android:inputType="textPassword"
+                android:paddingStart="20dp"
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp" />
 
-                <EditText
-                    android:id="@+id/editPassword"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Mật khẩu"
-                    android:imeOptions="actionNext"
-                    android:inputType="textPassword"
-                    android:textColorHint="@color/colorPrimary" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
+            <EditText
+                android:id="@+id/editTextTextPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                android:textColorHint="@color/progressbar_process">
-
-                <EditText
-                    android:id="@+id/passwordConfirm"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Nhập lại mật khẩu"
-                    android:imeOptions="actionNext"
-                    android:inputType="textPassword"
-                    android:textColorHint="@color/progressbar_process" />
-
-            </com.google.android.material.textfield.TextInputLayout>
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/custom_edittext_back"
+                android:ems="10"
+                android:fontFamily="sans-serif-medium"
+                android:hint="Nhập lại mật khẩu"
+                android:inputType="textPassword"
+                android:paddingStart="20dp"
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp"
+                tools:ignore="TextContrastCheck" />
 
         </LinearLayout>
 

@@ -34,9 +34,9 @@ public class CourseHolder extends RecyclerView.ViewHolder {
     }
 
     public void onClick(View view) {
-//        Intent intent = new  Intent(context, ListUnits.class);
-//        intent.putExtra("id", Integer.parseInt(edit_id.getText().toString()));
-//        startActivity(intent);
+        Intent intent = new  Intent(itemView.getContext(), ListUnits.class);
+        intent.putExtra("id", Integer.parseInt(edit_id.getText().toString()));
+        itemView.getContext().startActivity(intent);
     }
     private void bindingView(View itemView) {
         edit_id = itemView.findViewById(R.id.course_id);
@@ -46,7 +46,7 @@ public class CourseHolder extends RecyclerView.ViewHolder {
     }
 
     public void setView(Course course) {
-        edit_id.setText(course.getId());
+        edit_id.setText(course.getId()+"");
         edit_name.setText(course.getName());
         edit_rate.setText(course.getRateAverage()+"");
     }
