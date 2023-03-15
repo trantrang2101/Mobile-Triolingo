@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.example.triolingo_mobile.API.APICourse;
 import com.example.triolingo_mobile.API.RetrofitClient;
+import com.example.triolingo_mobile.DAO.CourseDAO;
 import com.example.triolingo_mobile.DataAccess.DbContext;
 import com.example.triolingo_mobile.Model.Course;
 import com.example.triolingo_mobile.R;
@@ -39,34 +40,18 @@ public class ListCoursesActivity extends AppCompatActivity {
         setContentView(R.layout.activity_list_courses);
         GetText();
     }
-    public void GetText() {
-        DbContext db = new DbContext();
-        connect = db.ConnectionClass();
-        if (connect != null) {
-            String sql = "Select * from Course";
-            try {
-                Statement state = connect.createStatement();
-                ResultSet rs = state.executeQuery(sql);
-                List<Course> listResult = new ArrayList<>();
-                while (rs.next()) {
-                    Course c = new Course();
-                    c.setName(rs.getString("Name"));
-                    c.setDescription(rs.getString("Description"));
-                    c.setNote(rs.getString("Note"));
-                    c.setRateAverage(rs.getFloat("RateAverage"));
-                    c.setStatus(rs.getInt("Status"));
-                    c.setId(rs.getInt("Id"));
-                    listResult.add(c);
-                }
-                RecyclerView recyclerView = (RecyclerView) findViewById(R.id.list_courses);
-                CourseAdapter adapter = new CourseAdapter(listResult);
-                RecyclerView.LayoutManager manager = new LinearLayoutManager(ListCoursesActivity.this);
-                recyclerView.setAdapter(adapter);
-                recyclerView.setLayoutManager(manager);
-                recyclerView.setVisibility(View.VISIBLE);
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
+    public void GetText()
+    {
+        try {
+            List<Course> listResult = CourseDAO.getInstance().getList("Status>0");
+            RecyclerView recyclerView = (RecyclerView) findViewById(R.id.list_courses);
+            CourseAdapter adapter = new CourseAdapter(listResult);
+            RecyclerView.LayoutManager manager = new LinearLayoutManager(ListCoursesActivity.this);
+            recyclerView.setAdapter(adapter);
+            recyclerView.setLayoutManager(manager);
+            recyclerView.setVisibility(View.VISIBLE);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 }
