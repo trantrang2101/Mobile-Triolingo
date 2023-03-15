@@ -10,24 +10,43 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.example.triolingo_mobile.DAO.UserDAO;
+import com.example.triolingo_mobile.Model.UserEntity;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class SettingProfileActivity extends AppCompatActivity{
+public class SettingProfileActivity extends AppCompatActivity {
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int REQUEST_IMAGE_PICK = 2;
+    TextView password;
+    TextView rePassword;
+    TextView name;
+    TextView email;
     private CircleImageView imageView;
+    public UserEntity us;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting_profile);
+        us = UserDAO.getInstance().GetUserById(1);
+        email = findViewById(R.id.editTextTextEmailAddress);
+        email.setText(us.getEmail());
+        name = findViewById(R.id.editTextTextPersonName);
+        name.setText(us.getFullNamel());
+        password = findViewById(R.id.editTextTextPassword2);
+        password.setText(us.getPassword());
+        rePassword = findViewById(R.id.editTextTextPassword);
         findViewById(R.id.btnClose).setOnClickListener(this::onQuit);
         findViewById(R.id.btnSave).setOnClickListener(this::onSave);
-        imageView=findViewById(R.id.imageview_account_profile);
+        imageView = findViewById(R.id.imageview_account_profile);
         findViewById(R.id.floatingActionButton).setOnClickListener(this::onEditImage);
     }
-    public void onEditImage(View v){
+
+    public void onEditImage(View v) {
         AlertDialog.Builder builder = new AlertDialog.Builder(SettingProfileActivity.this);
         builder.setTitle("Chọn ảnh từ");
         builder.setItems(new CharSequence[]{"Chụp ảnh", "Chọn ảnh"}, new DialogInterface.OnClickListener() {
@@ -47,6 +66,7 @@ public class SettingProfileActivity extends AppCompatActivity{
         });
         builder.show();
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -63,11 +83,27 @@ public class SettingProfileActivity extends AppCompatActivity{
             }
         }
     }
+
     public void onQuit(View view) {
-        Intent account = new  Intent(SettingProfileActivity.this, AccountActivity.class);
+        Intent account = new Intent(SettingProfileActivity.this, AccountActivity.class);
         startActivity(account);
     }
+
     public void onSave(View view) {
-        onQuit(view);
+        if (!password.getText().toString().equals(rePassword.getText().toString())) {
+            rePassword.setError("Không khớp với mật khẩu!");
+            return;
+        }
+        us.setPassword(password.getText().toString());
+        us.setFullNamel(name.getText().toString());
+        us.setEmail(email.getText().toString());
+        int n = UserDAO.getInstance().udpateUser(us);
+        if (n > 0) {
+            Toast.makeText(this, "Cập nhật thành công!", Toast.LENGTH_SHORT).show();
+            onQuit(view);
+        }
+        else {
+            Toast.makeText(this, "Cập nhật thất bại!", Toast.LENGTH_SHORT).show();
+        }
     }
 }
