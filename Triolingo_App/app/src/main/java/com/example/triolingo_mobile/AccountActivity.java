@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.triolingo_mobile.Model.UserEntity;
 import com.example.triolingo_mobile.Model.UserModel;
 import com.google.gson.Gson;
 
@@ -22,9 +23,9 @@ public class AccountActivity extends AppCompatActivity {
         String json = sharedPref.getString("user", null);
         if (json != null) {
             Gson gson = new Gson();
-            UserModel userLogin = gson.fromJson(json, UserModel.class);
+            UserEntity userLogin = gson.fromJson(json, UserEntity.class);
             TextView username = findViewById(R.id.tv_name);
-            username.setText(userLogin.getUsername());
+            username.setText(userLogin.getFullNamel());
         }
 
         (findViewById(R.id.btnSetting)).setOnClickListener(new View.OnClickListener() {
