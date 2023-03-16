@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.widget.*;
 
@@ -142,7 +143,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     void saveBase64Str(Bitmap bm) {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        bm.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+        bm.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
         byte[] byteArray = byteArrayOutputStream.toByteArray();
         avatarUrl = Base64.encodeToString(byteArray, Base64.NO_WRAP);
     }

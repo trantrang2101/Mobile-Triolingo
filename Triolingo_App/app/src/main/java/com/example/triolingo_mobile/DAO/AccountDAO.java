@@ -1,9 +1,13 @@
 package com.example.triolingo_mobile.DAO;
 
+import android.util.Log;
+
 import com.example.triolingo_mobile.DataAccess.DbContext;
 import com.example.triolingo_mobile.Model.AccountModel;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +25,7 @@ public class AccountDAO extends DbContext {
 
     public List<AccountModel> getList(String search) {
         List<AccountModel> list = new ArrayList<>();
-        String sql = "select * from "+DB_TABLE_NAME+" where  "+search;
+        String sql = "select * from "+DB_TABLE_NAME+" where "+search;
         ResultSet rs = getData(sql);
         try {
             while (rs.next()) {
@@ -42,10 +46,19 @@ public class AccountDAO extends DbContext {
     }
 
     public boolean registerAccount (AccountModel acc) {
-        String sql = "INSERT INTO " + DB_TABLE_NAME + " VALUES (" + acc.getFullName() + ", " +
-                                    acc.getEmail() + ", " + acc.getPassword() + ", " + (acc.getAvatarUrl() == null ? "null" : acc.getAvatarUrl()) +
-                                    ", " + acc.getStatus() + ", " + (acc.getNote() == null ? "null" : acc.getNote());
-        ResultSet rs = super.getData(sql);
-        return true;
+        String sql = "INSERT INTO " + DB_TABLE_NAME + " VALUES ('" + acc.getFullName() + "', '" +
+                                    acc.getEmail() + "', '" + acc.getPassword() + "', " + (acc.getAvatarUrl() == null ? "null" : "'" + acc.getAvatarUrl() + "'") +
+                                    ", " + acc.getStatus() + ", " + (acc.getNote() == null ? "null" : "'" + acc.getNote() + "'") + ")";
+        try {
+            return executeUpdate(sql) > 0;
+        } catch (SQLException e) {
+            Log.e("Error:", e.getMessage() );
+        }
+        return false;
+    }
+
+    int executeUpdate(String sql) throws SQLException {
+        Statement stm = conn.createStatement();
+        return stm.executeUpdate(sql);
     }
 }
