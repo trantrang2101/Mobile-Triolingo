@@ -9,4 +9,7 @@
     <string name="btn_quit">QUIT</string>
     <string name="btn_cancel">CANCEL</string>
     <string name="lesson_close_text"><b>Are you sure you want to quit ?</b>\nAll progress in this lesson will be lost.</string>
+    <string name="update_profile_user_sucess">Cập nhật thành công!</string>
+    <string name="update_profile_user_fail">Cập nhật thất bại!</string>
+    <string name="repass_not_match_pass">Không khớp với mật khẩu!</string>
 </resources>

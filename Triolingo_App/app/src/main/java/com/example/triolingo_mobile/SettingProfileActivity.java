@@ -3,9 +3,13 @@ package com.example.triolingo_mobile;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -15,6 +19,15 @@ import android.widget.Toast;
 
 import com.example.triolingo_mobile.DAO.UserDAO;
 import com.example.triolingo_mobile.Model.UserEntity;
+import com.example.triolingo_mobile.Model.UserModel;
+import com.google.gson.Gson;
+
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.io.IOUtils;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -32,6 +45,14 @@ public class SettingProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting_profile);
+//        SharedPreferences sharedPref = getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
+//        String json = sharedPref.getString("user", null);
+//        int userId = 0;
+//        if (json != null) {
+//            Gson gson = new Gson();
+//            UserEntity userLogin = gson.fromJson(json, UserEntity.class);
+//            userId = userLogin.getId();
+//        }
         us = UserDAO.getInstance().GetUserById(1);
         email = findViewById(R.id.editTextTextEmailAddress);
         email.setText(us.getEmail());
@@ -67,6 +88,40 @@ public class SettingProfileActivity extends AppCompatActivity {
         builder.show();
     }
 
+    public Uri getImageUri(CircleImageView circleImageView) {
+        Drawable drawable = circleImageView.getDrawable();
+        Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
+
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+
+        String path = MediaStore.Images.Media.insertImage(this.getContentResolver(), bitmap, "Title", null);
+        return Uri.parse(path);
+    }
+    public String getBase64FromUri(Uri uri) {
+        InputStream inputStream = null;
+        try {
+            inputStream = getContentResolver().openInputStream(uri);
+            byte[] bytes = new byte[0];
+            try {
+                bytes = IOUtils.toByteArray(inputStream);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            return Base64.encodeBase64String(bytes);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (inputStream != null) {
+                try {
+                    inputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return null;
+    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -91,7 +146,7 @@ public class SettingProfileActivity extends AppCompatActivity {
 
     public void onSave(View view) {
         if (!password.getText().toString().equals(rePassword.getText().toString())) {
-            rePassword.setError("Không khớp với mật khẩu!");
+            rePassword.setError(getString(R.string.repass_not_match_pass));
             return;
         }
         us.setPassword(password.getText().toString());
@@ -99,11 +154,11 @@ public class SettingProfileActivity extends AppCompatActivity {
         us.setEmail(email.getText().toString());
         int n = UserDAO.getInstance().udpateUser(us);
         if (n > 0) {
-            Toast.makeText(this, "Cập nhật thành công!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.update_profile_user_sucess), Toast.LENGTH_SHORT).show();
             onQuit(view);
         }
         else {
-            Toast.makeText(this, "Cập nhật thất bại!", Toast.LENGTH_SHORT).show();
+            name.setError(getString(R.string.update_profile_user_fail));
         }
     }
 }
