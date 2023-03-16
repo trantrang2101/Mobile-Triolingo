@@ -1,15 +1,15 @@
 package com.example.triolingo_mobile.Model;
 
 public class UserModel {
-    private String Username;
+    private String email;
     private String password;
 
-    public String getUsername() {
-        return Username;
+    public String getEmail() {
+        return email;
     }
 
-    public void setUsername(String username) {
-        Username = username;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getPassword() {
@@ -23,8 +23,8 @@ public class UserModel {
     public UserModel() {
     }
 
-    public UserModel(String username, String password) {
-        Username = username;
+    public UserModel(String email, String password) {
+        this.email = email;
         this.password = password;
     }
 }

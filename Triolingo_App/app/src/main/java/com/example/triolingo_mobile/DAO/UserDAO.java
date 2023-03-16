@@ -2,6 +2,7 @@ package com.example.triolingo_mobile.DAO;
 
 import com.example.triolingo_mobile.DataAccess.DbContext;
 import com.example.triolingo_mobile.Model.UserEntity;
+import com.example.triolingo_mobile.Model.UserModel;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -9,7 +10,7 @@ import java.sql.SQLException;
 
 public class UserDAO extends DbContext {
     private static UserDAO instance;
-    private static String DB_TABLE_NAME="[User]";
+    private static String DB_TABLE_NAME = "[User]";
     public static final String ID_COLUMN = "Id";
     public static final String FULLNAME_COLUMN = "FullName";
     public static final String EMAIL_COLUMN = "Email";
@@ -50,7 +51,7 @@ public class UserDAO extends DbContext {
         String sql = "update " + DB_TABLE_NAME + " set "
                 + FULLNAME_COLUMN + " = ?, "
                 + EMAIL_COLUMN + " = ?,"
-                + AVATARURL_COLUMN +" = ?,"
+                + AVATARURL_COLUMN + " = ?,"
                 + PASSWORD_COLUMN + " = ? where " + ID_COLUMN + " = ?";
         int n = 0;
         try {
@@ -65,6 +66,27 @@ public class UserDAO extends DbContext {
             throw new RuntimeException(e);
         }
         return n;
+    }
+
+    public UserEntity Login(UserModel us) {
+        String sql = "select * from " + DB_TABLE_NAME + " where " + EMAIL_COLUMN + " = " + us.getEmail() + " and " + PASSWORD_COLUMN + " = " + us.getPassword();
+        ResultSet rs = getData(sql);
+        try {
+            if (rs.next()) {
+                UserEntity user = new UserEntity();
+                user.setId(rs.getInt(ID_COLUMN));
+                user.setFullNamel(rs.getString(FULLNAME_COLUMN));
+                user.setEmail(rs.getString(EMAIL_COLUMN));
+                user.setAvatarUrl(rs.getString(AVATARURL_COLUMN));
+                user.setPassword(rs.getString(PASSWORD_COLUMN));
+                user.setStatus(rs.getInt(STATUS_COLUMN));
+                user.setNote(rs.getString(NOTE_COLUMN));
+                return user;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return null;
     }
 
 }

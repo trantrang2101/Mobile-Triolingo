@@ -2,6 +2,8 @@ package com.example.triolingo_mobile;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.triolingo_mobile.DAO.UserDAO;
+import com.example.triolingo_mobile.Model.UserEntity;
 import com.example.triolingo_mobile.Model.UserModel;
 import com.google.gson.Gson;
 
@@ -77,14 +79,15 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void LoginBtn(View v) {
-        String UserName = InputUsername.getText().toString().trim();
+        String Email = InputUsername.getText().toString().trim();
         String Password = InputPassword.getText().toString().trim();
-        UserModel userLogin = new UserModel(UserName, Password);
-        if (!UserName.equals("admin") && !Password.equals("aadmin")) {
+        UserModel userLogin = new UserModel(Email, Password);
+        UserEntity us = UserDAO.getInstance().Login(userLogin);
+        if (us != null) {
             InputUsername.setError("Username or Password not correct");
         } else {
             Gson gson = new Gson();
-            String userJson = gson.toJson(userLogin);
+            String userJson = gson.toJson(us);
             SharedPreferences sharedPref = getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPref.edit();
             editor.putString("user", userJson);
