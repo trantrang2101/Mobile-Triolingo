@@ -8,11 +8,14 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,7 +25,7 @@ import com.example.triolingo_mobile.Model.UserEntity;
 import com.example.triolingo_mobile.Model.UserModel;
 import com.google.gson.Gson;
 
-import org.apache.commons.codec.binary.Base64;
+//import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
 
 import java.io.ByteArrayOutputStream;
@@ -38,6 +41,7 @@ public class SettingProfileActivity extends AppCompatActivity {
     TextView rePassword;
     TextView name;
     TextView email;
+    Bitmap imageBitmap;
     private CircleImageView imageView;
     public UserEntity us;
 
@@ -64,6 +68,8 @@ public class SettingProfileActivity extends AppCompatActivity {
         findViewById(R.id.btnClose).setOnClickListener(this::onQuit);
         findViewById(R.id.btnSave).setOnClickListener(this::onSave);
         imageView = findViewById(R.id.imageview_account_profile);
+        Bitmap b = convertBase64ToBitMap();
+        imageView.setImageBitmap(b);
         findViewById(R.id.floatingActionButton).setOnClickListener(this::onEditImage);
     }
 
@@ -88,51 +94,48 @@ public class SettingProfileActivity extends AppCompatActivity {
         builder.show();
     }
 
-    public Uri getImageUri(CircleImageView circleImageView) {
-        Drawable drawable = circleImageView.getDrawable();
-        Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
-
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
-
-        String path = MediaStore.Images.Media.insertImage(this.getContentResolver(), bitmap, "Title", null);
-        return Uri.parse(path);
-    }
-    public String getBase64FromUri(Uri uri) {
-        InputStream inputStream = null;
+    String convertToBase64(Bitmap bm) {
         try {
-            inputStream = getContentResolver().openInputStream(uri);
-            byte[] bytes = new byte[0];
-            try {
-                bytes = IOUtils.toByteArray(inputStream);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            return Base64.encodeBase64String(bytes);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (inputStream != null) {
-                try {
-                    inputStream.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            bm.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+            byte[] byteArray = byteArrayOutputStream.toByteArray();
+            String avatarUrl = Base64.encodeToString(byteArray, Base64.NO_WRAP);
+            return avatarUrl;
+        } catch (Exception ex) {
+            Log.e("Error:", ex.getMessage());
         }
         return null;
     }
+
+    public Bitmap convertBase64ToBitMap() {
+        try {
+            String base64String = us.getAvatarUrl();
+//            String base64Image = base64String.split(",")[1];
+            byte[] decodedString = Base64.decode(base64String, 0);
+            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+            return decodedByte;
+        } catch (Exception ex) {
+            Log.e("Error:", ex.getMessage());
+        }
+        return null;
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case REQUEST_IMAGE_CAPTURE:
-                    Bitmap bitmap = (Bitmap) data.getExtras().get("data");
-                    imageView.setImageBitmap(bitmap);
+                    imageBitmap = (Bitmap) data.getExtras().get("data");
+                    imageView.setImageBitmap(imageBitmap);
                     break;
                 case REQUEST_IMAGE_PICK:
                     Uri imageUri = data.getData();
+                    try {
+                        imageBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
                     imageView.setImageURI(imageUri);
                     break;
             }
@@ -149,6 +152,8 @@ public class SettingProfileActivity extends AppCompatActivity {
             rePassword.setError(getString(R.string.repass_not_match_pass));
             return;
         }
+        String avtURL = convertToBase64(imageBitmap);
+        us.setAvatarUrl(avtURL);
         us.setPassword(password.getText().toString());
         us.setFullNamel(name.getText().toString());
         us.setEmail(email.getText().toString());
@@ -156,8 +161,7 @@ public class SettingProfileActivity extends AppCompatActivity {
         if (n > 0) {
             Toast.makeText(this, getString(R.string.update_profile_user_sucess), Toast.LENGTH_SHORT).show();
             onQuit(view);
-        }
-        else {
+        } else {
             name.setError(getString(R.string.update_profile_user_fail));
         }
     }
