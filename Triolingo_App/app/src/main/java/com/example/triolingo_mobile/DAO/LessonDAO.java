@@ -21,7 +21,7 @@ public class LessonDAO extends DbContext {
 
     public List<LessonModel> getList(String search) {
         List<LessonModel> list = new ArrayList<>();
-        String sql = "Select * from "+DB_TABLE_NAME+" where  "+search+" order by Order";
+        String sql = "Select * from "+DB_TABLE_NAME+" where  "+search;
         ResultSet rs = getData(sql);
         try {
             while (rs.next()) {

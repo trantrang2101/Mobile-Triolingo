@@ -40,4 +40,24 @@ public class CourseDAO extends DbContext {
         }
         return list;
     }
+    public Course getDetail(int id) {
+        String sql = "Select * from "+DB_TABLE_NAME+" where id= "+id;
+        ResultSet rs = getData(sql);
+        try {
+            while (rs.next()) {
+                Course c = new Course();
+                c.setName(rs.getString("Name"));
+                c.setDescription(rs.getString("Description"));
+                c.setNote(rs.getString("Note"));
+                c.setRateAverage(rs.getFloat("RateAverage"));
+                c.setStatus(rs.getInt("Status"));
+                c.setId(rs.getInt("Id"));
+                return c;
+            }
+            rs.close();
+        } catch (Exception ex) {
+
+        }
+        return null;
+    }
 }

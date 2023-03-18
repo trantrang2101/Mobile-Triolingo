@@ -24,17 +24,15 @@ public class CircularProgressView extends View {
     }
 
     private void init() {
-        float size = 15f;
+        float size = 5f;
         // Khởi tạo Paint cho hình tròn trong
         mInnerPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mInnerPaint.setStyle(Paint.Style.FILL);
-        mInnerPaint.setColor(getContext().getResources().getColor(R.color.correct_background));
 
         // Khởi tạo Paint cho viền
         mOuterPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mOuterPaint.setStyle(Paint.Style.STROKE);
         mOuterPaint.setStrokeWidth(size);
-        mOuterPaint.setColor(getContext().getResources().getColor(R.color.progressbar_process));
 
         // Khởi tạo giá trị ban đầu
         mBorderWidth = size;
@@ -80,12 +78,22 @@ public class CircularProgressView extends View {
         float centerY = getHeight() / 2;
         float radius = Math.min(centerX, centerY) - mBorderWidth / 2;
 
+        if(mProgress>0){
+            mInnerPaint.setColor(getContext().getResources().getColor(R.color.correct_background));
+        }else{
+            mInnerPaint.setColor(getContext().getResources().getColor(R.color.grey));
+        }
         // Vẽ hình tròn trong
         canvas.drawCircle(centerX, centerY, radius, mInnerPaint);
 
         // Vẽ viền
         RectF rectF = new RectF(mBorderWidth / 2, mBorderWidth / 2, getWidth() - mBorderWidth / 2, getHeight() - mBorderWidth / 2);
         float sweepAngle = 360 * mProgress / 100;
+        if(mProgress>0){
+            mOuterPaint.setColor(getContext().getResources().getColor(R.color.progressbar_process));
+        }else{
+            mOuterPaint.setColor(getContext().getResources().getColor(R.color.grey));
+        }
         canvas.drawArc(rectF, mStartAngle, -sweepAngle, false, mOuterPaint);
     }
 

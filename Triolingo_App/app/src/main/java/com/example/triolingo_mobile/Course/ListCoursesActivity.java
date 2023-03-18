@@ -25,6 +25,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import javax.xml.transform.Result;
 
@@ -44,6 +45,9 @@ public class ListCoursesActivity extends AppCompatActivity {
     {
         try {
             List<Course> listResult = CourseDAO.getInstance().getList("Status>0");
+            for (Course cour: listResult) {
+                cour.setAssign(new Random().nextBoolean());
+            }
             RecyclerView recyclerView = (RecyclerView) findViewById(R.id.list_courses);
             CourseAdapter adapter = new CourseAdapter(listResult);
             RecyclerView.LayoutManager manager = new LinearLayoutManager(ListCoursesActivity.this);

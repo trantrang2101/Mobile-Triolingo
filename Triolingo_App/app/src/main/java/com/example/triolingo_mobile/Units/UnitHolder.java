@@ -1,36 +1,34 @@
 package com.example.triolingo_mobile.Units;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SnapHelper;
 
 import android.content.Context;
-import android.os.Bundle;
+import android.content.Intent;
 import android.view.View;
 import android.widget.Button;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.example.triolingo_mobile.Course.CourseDescriptionActivity;
 import com.example.triolingo_mobile.DAO.LessonDAO;
-import com.example.triolingo_mobile.DAO.UnitDAO;
 import com.example.triolingo_mobile.Model.LessonModel;
 import com.example.triolingo_mobile.Model.UnitModel;
 import com.example.triolingo_mobile.R;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class UnitHolder extends RecyclerView.ViewHolder {
-    private Button card;
     private TextView edit_id;
     private TextView edit_name;
     private TextView edit_desc;
     private RecyclerView list_lesson;
+    private CardView card_view;
     private Context context;
+    private UnitModel unit;
 
     public UnitHolder(@NonNull View itemView, Context context) {
         super(itemView);
@@ -40,7 +38,7 @@ public class UnitHolder extends RecyclerView.ViewHolder {
     }
 
     private void bindingAction(View itemView) {
-        card.setOnClickListener(this::onClick);
+        card_view.setOnClickListener(this::onClick);
     }
 
     public void onClick(View view) {
@@ -50,15 +48,16 @@ public class UnitHolder extends RecyclerView.ViewHolder {
         edit_id = itemView.findViewById(R.id.unit_id);
         edit_name = itemView.findViewById(R.id.unit_name);
         edit_desc = itemView.findViewById(R.id.unit_description);
-        card = itemView.findViewById(R.id.unit_btn);
         list_lesson=itemView.findViewById(R.id.lesson_list);
+        card_view=itemView.findViewById(R.id.unit_card_view);
     }
 
     public void setView(UnitModel unit) {
+        this.unit=unit;
         edit_id.setText(unit.getId()+"");
         edit_desc.setText(unit.getDescription());
         edit_name.setText(unit.getName());
-        List<LessonModel> listResult = LessonDAO.getInstance().getList("UnitId=="+unit.getId());
+        List<LessonModel> listResult = LessonDAO.getInstance().getList("UnitId="+unit.getId());
         LessonAdapter adapter = new LessonAdapter(listResult,list_lesson);
         list_lesson.setAdapter(adapter);
         list_lesson.setVisibility(View.VISIBLE);
@@ -68,32 +67,32 @@ public class UnitHolder extends RecyclerView.ViewHolder {
             @Override
             public void onLayoutChildren(RecyclerView.Recycler recycler, RecyclerView.State state) {
                 super.onLayoutChildren(recycler, state);
-                int row = 0;
-                int col = 2;
+                if(getItemCount()==0){
+                    return;
+                }
                 boolean rightToLeft=false;
-                for (int i = 0; i < getChildCount(); i++) {
-                    View view = getChildAt(i);
-                    int left = col * view.getWidth();
-                    int top = row * view.getHeight();
-                    int right = left + view.getWidth();
-                    int bottom = top + view.getHeight();
-                    view.layout(left, top, right, bottom);
-                    row++;
-                    if(rightToLeft){
-                        if(col-1<0){
-                            col++;
-                            rightToLeft=false;
-                        }else{
-                            col--;
-                        }
-                    }else{
-                        if(col+1>column-1){
-                            col--;
-                            rightToLeft=true;
-                        }else{
-                            col++;
-                        }
+                int previousWidth = 0,previousHeight = 0;
+                View view = getChildAt(0);
+                previousWidth = view.getWidth();
+                previousHeight = view.getHeight();
+                int left = (getWidth()-view.getWidth())/2,
+                        top = 0,
+                        bottom=view.getHeight(),
+                        right=left+view.getWidth();
+                view.layout(left, top, right, bottom);
+                for (int i = 1; i < getChildCount(); i++) {
+                    view = getChildAt(i);
+                    int distanceWidth = ((int)Math.round(previousWidth*4/5)),distanceHeight=((int)Math.round(previousHeight*4/5));
+                    if((rightToLeft&&left-distanceWidth<=0)||(!rightToLeft&&right+distanceWidth-getWidth()>=0)){
+                        rightToLeft=!rightToLeft;
                     }
+                    top += distanceHeight;
+                    left += distanceWidth*(rightToLeft?-1:1);
+                    previousWidth = view.getWidth();
+                    previousHeight = view.getHeight();
+                    right = left + previousWidth;
+                    bottom = top + previousHeight + distanceHeight;
+                    view.layout(left, top, right, bottom);
                 }
             }
         };
