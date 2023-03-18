@@ -15,6 +15,7 @@ public class Course {
     private float rateAverage;
     private int status;
     private String note;
+    private boolean isAssign;
 
     public Course() {
     }
@@ -26,6 +27,14 @@ public class Course {
         this.rateAverage = rateAverage;
         this.status = status;
         this.note = note;
+    }
+
+    public boolean isAssign() {
+        return isAssign;
+    }
+
+    public void setAssign(boolean assign) {
+        isAssign = assign;
     }
 
     @Override

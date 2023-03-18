@@ -22,7 +22,7 @@ public class UnitDAO extends DbContext {
 
     public List<UnitModel> getList(String search) {
         List<UnitModel> list = new ArrayList<>();
-        String sql = "Select * from "+DB_TABLE_NAME+" where  "+search+" order by [Order]";
+        String sql = "Select * from "+DB_TABLE_NAME+" where  "+search;
         ResultSet rs = getData(sql);
         try {
             while (rs.next()) {
