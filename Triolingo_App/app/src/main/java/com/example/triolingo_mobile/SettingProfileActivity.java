@@ -26,7 +26,6 @@ import com.example.triolingo_mobile.Model.UserModel;
 import com.google.gson.Gson;
 
 //import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.io.IOUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

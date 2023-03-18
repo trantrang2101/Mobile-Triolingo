@@ -2,6 +2,7 @@ package com.example.triolingo_mobile.DAO;
 
 import com.example.triolingo_mobile.DataAccess.DbContext;
 import com.example.triolingo_mobile.Model.LessonModel;
+import com.example.triolingo_mobile.Model.StudentCourse;
 
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -32,6 +33,7 @@ public class LessonDAO extends DbContext {
                 c.setStatus(rs.getInt("Status"));
                 c.setId(rs.getInt("Id"));
                 c.setUnitId(rs.getInt("UnitId"));
+                c.setTotalMark(QuestionDAO.getInstance().getMarkByLesson(c.getId()));
                 list.add(c);
             }
             rs.close();
@@ -39,5 +41,26 @@ public class LessonDAO extends DbContext {
 
         }
         return list;
+    }
+    public LessonModel getDetail(int id) {
+        String sql = "Select * from "+DB_TABLE_NAME+" where id= "+id;
+        ResultSet rs = getData(sql);
+        try {
+            while (rs.next()) {
+                LessonModel c = new LessonModel();
+                c.setName(rs.getString("Name"));
+                c.setDescription(rs.getString("Description"));
+                c.setNote(rs.getString("Note"));
+                c.setStatus(rs.getInt("Status"));
+                c.setId(rs.getInt("Id"));
+                c.setUnitId(rs.getInt("UnitId"));
+                c.setTotalMark(QuestionDAO.getInstance().getMarkByLesson(c.getId()));
+                return c;
+            }
+            rs.close();
+        } catch (Exception ex) {
+
+        }
+        return null;
     }
 }

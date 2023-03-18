@@ -9,17 +9,24 @@ import androidx.recyclerview.widget.SnapHelper;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.triolingo_mobile.Course.CourseDescriptionActivity;
 import com.example.triolingo_mobile.DAO.LessonDAO;
+import com.example.triolingo_mobile.DAO.StudentLessonDAO;
 import com.example.triolingo_mobile.Model.LessonModel;
+import com.example.triolingo_mobile.Model.StudentCourse;
+import com.example.triolingo_mobile.Model.StudentLesson;
 import com.example.triolingo_mobile.Model.UnitModel;
+import com.example.triolingo_mobile.Model.UserEntity;
 import com.example.triolingo_mobile.R;
+import com.google.gson.Gson;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class UnitHolder extends RecyclerView.ViewHolder {
     private TextView edit_id;
@@ -57,7 +64,24 @@ public class UnitHolder extends RecyclerView.ViewHolder {
         edit_id.setText(unit.getId()+"");
         edit_desc.setText(unit.getDescription());
         edit_name.setText(unit.getName());
+        int userId = 2;
+        SharedPreferences sharedPref = context.getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
+        String json = sharedPref.getString("user", null);
+        if (json != null) {
+            Gson gson = new Gson();
+            UserEntity userLogin = gson.fromJson(json, UserEntity.class);
+            userId = userLogin.getId();
+        }
+        List<StudentLesson> list = StudentLessonDAO.getInstance().getList("LessionId in (select id from [Lesson] Where [UnitId]="+unit.getId()+") AND StudentCourseId in (select id from [StudentCourse] Where StudentId="+userId+")");
         List<LessonModel> listResult = LessonDAO.getInstance().getList("UnitId="+unit.getId());
+        listResult.get(0).setPreviousActived(true);
+        for (int i = 0; i< listResult.size();i++) {
+            int index= list.stream().map(StudentLesson::getLessonId).collect(Collectors.toList()).indexOf(listResult.get(i).getId());
+            listResult.get(i).setUserMark(index!=-1?list.get(index).getMark():-1);
+            if(i<listResult.size()-1){
+                listResult.get(i+1).setPreviousActived(index!=-1);
+            }
+        }
         LessonAdapter adapter = new LessonAdapter(listResult,list_lesson);
         list_lesson.setAdapter(adapter);
         list_lesson.setVisibility(View.VISIBLE);

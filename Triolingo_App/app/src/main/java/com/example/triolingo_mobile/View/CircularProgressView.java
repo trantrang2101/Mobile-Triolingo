@@ -15,7 +15,7 @@ import com.example.triolingo_mobile.R;
 public class CircularProgressView extends View {
     private Paint mInnerPaint, mOuterPaint;
     private float mBorderWidth;
-    private int mProgress;
+    private float mProgress;
     private int mStartAngle;
 
     public CircularProgressView(Context context, AttributeSet attrs) {
@@ -88,16 +88,16 @@ public class CircularProgressView extends View {
 
         // Vẽ viền
         RectF rectF = new RectF(mBorderWidth / 2, mBorderWidth / 2, getWidth() - mBorderWidth / 2, getHeight() - mBorderWidth / 2);
-        float sweepAngle = 360 * mProgress / 100;
         if(mProgress>0){
+            float sweepAngle = 360 * mProgress / 100;
             mOuterPaint.setColor(getContext().getResources().getColor(R.color.progressbar_process));
+            canvas.drawArc(rectF, mStartAngle, -sweepAngle, false, mOuterPaint);
         }else{
             mOuterPaint.setColor(getContext().getResources().getColor(R.color.grey));
         }
-        canvas.drawArc(rectF, mStartAngle, -sweepAngle, false, mOuterPaint);
     }
 
-    public void setProgress(int progress) {
+    public void setProgress(float progress) {
         mProgress = progress;
         invalidate();
     }

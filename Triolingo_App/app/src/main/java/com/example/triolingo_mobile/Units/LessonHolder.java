@@ -21,11 +21,9 @@ public class LessonHolder extends RecyclerView.ViewHolder {
     private TextView edit_id;
     private TextView edit_name;
     private Context context;
-
+    private LessonModel lesson;
     public LessonHolder(@NonNull View itemView, Context context) {
         super(itemView);
-        bindingView(itemView);
-        bindingAction(itemView);
         this.context = context;
     }
 
@@ -42,12 +40,19 @@ public class LessonHolder extends RecyclerView.ViewHolder {
         edit_id = itemView.findViewById(R.id.lesson_id);
         edit_name = itemView.findViewById(R.id.lesson_name);
         card = itemView.findViewById(R.id.lesson_btn);
-        card.setProgress( new Random().nextInt(100));
+        card.setProgress(lesson.getUserMark()!=-1?
+                (lesson.getUserMark()==lesson.getTotalMark()?100:(((float)lesson.getUserMark()/lesson.getTotalMark())*100))
+                :0);
     }
 
     public void setView(LessonModel lesson) {
+        this.lesson=lesson;
+        bindingView(itemView);
         edit_id.setText(lesson.getId()+"");
         edit_name.setText(lesson.getName());
+        if(lesson.isPreviousActived()){
+            bindingAction(itemView);
+        }
     }
     public void setTranslationX(float translationX) {
         card.setTranslationX(translationX);
