@@ -9,11 +9,15 @@ import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.example.triolingo_mobile.DAO.ExerciseDAO;
+import com.example.triolingo_mobile.Model.Exercise;
 import com.example.triolingo_mobile.Model.LessonModel;
 import com.example.triolingo_mobile.R;
 import com.example.triolingo_mobile.Util.LessonUtil;
 import com.example.triolingo_mobile.View.CircularProgressView;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class LessonHolder extends RecyclerView.ViewHolder {
@@ -34,9 +38,16 @@ public class LessonHolder extends RecyclerView.ViewHolder {
     }
 
     public void onClick(View view) {
-        Intent intent = new  Intent(itemView.getContext(), LessonUtil.class);
-        intent.putExtra("id", Integer.parseInt(edit_id.getText().toString()));
-        itemView.getContext().startActivity(intent);
+//        Intent intent = new  Intent(itemView.getContext(), LessonUtil.class);
+//        intent.putExtra("id", Integer.parseInt(edit_id.getText().toString()));
+//        itemView.getContext().startActivity(intent);
+
+        ExerciseDAO exDao = ExerciseDAO.getInstance();
+        String lessonId = edit_id.getText().toString();
+        ArrayList<Exercise> listExercise = exDao.getExerciseOfLesson(lessonId);
+
+        LessonUtil.nextExercise(listExercise, 0, 0, 0, 0, itemView.getContext());
+
     }
     private void bindingView(View itemView) {
         edit_id = itemView.findViewById(R.id.lesson_id);

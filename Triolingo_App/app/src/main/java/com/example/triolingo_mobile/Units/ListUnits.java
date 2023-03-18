@@ -32,7 +32,7 @@ public class ListUnits extends AppCompatActivity {
         Intent intent = getIntent();
         int id = intent.getIntExtra("id",0);
 
-        List<UnitModel> listResult = UnitDAO.getInstance().getList("Status>0 AND "+(id==0?"":"CourseId=="+id));
+        List<UnitModel> listResult = UnitDAO.getInstance().getList("Status>0 AND "+(id==0?"":"CourseId="+id));
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.list_unit);
         UnitAdapter adapter = new UnitAdapter(listResult);
         RecyclerView.LayoutManager manager = new LinearLayoutManager(ListUnits.this);

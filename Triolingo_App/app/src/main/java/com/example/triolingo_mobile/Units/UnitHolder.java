@@ -58,7 +58,7 @@ public class UnitHolder extends RecyclerView.ViewHolder {
         edit_id.setText(unit.getId()+"");
         edit_desc.setText(unit.getDescription());
         edit_name.setText(unit.getName());
-        List<LessonModel> listResult = LessonDAO.getInstance().getList("UnitId=="+unit.getId());
+        List<LessonModel> listResult = LessonDAO.getInstance().getList("UnitId="+unit.getId());
         LessonAdapter adapter = new LessonAdapter(listResult,list_lesson);
         list_lesson.setAdapter(adapter);
         list_lesson.setVisibility(View.VISIBLE);
