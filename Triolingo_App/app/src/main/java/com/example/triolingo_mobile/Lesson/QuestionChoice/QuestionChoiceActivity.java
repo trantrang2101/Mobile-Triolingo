@@ -54,18 +54,14 @@ public class QuestionChoiceActivity extends AppCompatActivity {
         Intent intent = getIntent();
         ExerciseDAO exDao = ExerciseDAO.getInstance();
 
-        ArrayList<Exercise> listExercise = (ArrayList<Exercise>) intent.getSerializableExtra("listExercise");
         int quesNo = intent.getIntExtra("quesNo", -1);
         int progressPercent = intent.getIntExtra("progressPercent", -1);
         curPoint += intent.getIntExtra("curPoint", -1);
         totalPoint += intent.getIntExtra("totalPoint", -1);
         int curProgress = intent.getIntExtra("curProgress", -1);
 
-        progressBar.setProgress(curProgress);
-        Exercise exercise = listExercise.get(quesNo);
-        Question question = exDao.getQuesOfExercise(exercise.getId());
-        ArrayList<AnswerModel> ansList = exDao.getAnswerOfQuestion(question.getId());
-        String title = exercise.getTitle();
+        Question question = LessonUtil.getListQuestion().get(quesNo);
+        ArrayList<AnswerModel> ansList = exDao.getAnswerOfQuestion(question.getId(),"STATUS>0");
         String ques = question.getQuestion1();
         totalPoint += question.getMark();
 
@@ -74,7 +70,7 @@ public class QuestionChoiceActivity extends AppCompatActivity {
         }
 
         TextView textQues = findViewById(R.id.lesson_text_ques);
-        String displayAns = title+":\n \""+ ques + "\"";
+        String displayAns = ques + "\"";
         textQues.setText(displayAns);
 
         AnswerModel ans = exDao.getCorrectAnswer(ansList);
@@ -146,7 +142,7 @@ public class QuestionChoiceActivity extends AppCompatActivity {
                             continueBtn.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
-                                    LessonUtil.nextExercise(listExercise, quesNo+1, curPoint,
+                                    LessonUtil.nextQuestion(quesNo+1, curPoint,
                                             totalPoint,curProgress + progressPercent,
                                             QuestionChoiceActivity.this);
                                 }

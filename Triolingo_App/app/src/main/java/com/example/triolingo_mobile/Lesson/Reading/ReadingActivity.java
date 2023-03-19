@@ -121,7 +121,7 @@ public class ReadingActivity extends AppCompatActivity {
                         continueBtn.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                LessonUtil.nextExercise(listExercise, quesNo + 1, curPoint,
+                                LessonUtil.nextExercise(quesNo + 1, curPoint,
                                         totalPoint, curProgress + progressPercent,
                                         ReadingActivity.this);
                             }
@@ -138,7 +138,7 @@ public class ReadingActivity extends AppCompatActivity {
             continueBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    LessonUtil.nextExercise(listExercise, quesNo + 1, curPoint,
+                    LessonUtil.nextExercise( quesNo + 1, curPoint,
                             totalPoint, curProgress + progressPercent,
                             ReadingActivity.this);
                 }

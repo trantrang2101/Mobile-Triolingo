@@ -1,5 +1,7 @@
 package com.example.triolingo_mobile.Model;
 
+import com.example.triolingo_mobile.DAO.ExerciseDAO;
+
 public class Question {
     private int id;
     private String question1;
@@ -16,6 +18,10 @@ public class Question {
         this.status = status;
         this.exerciseId = exerciseId;
         this.mark = mark;
+    }
+
+    public Exercise getExercise(){
+        return ExerciseDAO.getInstance().getExercise(getExerciseId());
     }
 
     public int getId() {

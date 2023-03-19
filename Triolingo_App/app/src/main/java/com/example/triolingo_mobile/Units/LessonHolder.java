@@ -41,7 +41,8 @@ public class LessonHolder extends RecyclerView.ViewHolder {
         ArrayList<Exercise> listExercise = exDao.getExerciseOfLesson(lessonId);
 
         if(listExercise.size()>0){
-            LessonUtil.nextExercise(listExercise, 1, 0, 0, 0, itemView.getContext());
+            LessonUtil.setListExercise(listExercise);
+            LessonUtil.nextExercise( 0, 0, 0, 0, itemView.getContext());
         }
     }
     private void bindingView(View itemView) {

@@ -67,7 +67,7 @@ public class ListenChoiceActivity extends AppCompatActivity {
 
         Exercise exercise = listExercise.get(quesNo);
         Question question = exDao.getQuesOfExercise(exercise.getId());
-        ArrayList<AnswerModel> ansList = exDao.getAnswerOfQuestion(question.getId());
+        ArrayList<AnswerModel> ansList = exDao.getAnswerOfQuestion(question.getId(),"STATUS>0");
         String title = exercise.getTitle();
         String ques = question.getQuestion1();
         totalPoint += question.getMark();
@@ -175,7 +175,7 @@ public class ListenChoiceActivity extends AppCompatActivity {
                             continueBtn.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
-                                    LessonUtil.nextExercise(listExercise, quesNo+1, curPoint,
+                                    LessonUtil.nextQuestion(quesNo+1, curPoint,
                                             totalPoint,curProgress + progressPercent,
                                             ListenChoiceActivity.this);
                                 }
