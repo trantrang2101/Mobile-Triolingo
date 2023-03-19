@@ -12,7 +12,7 @@ import java.util.List;
 public class StudentCourseDAO extends DbContext {
 
     private static StudentCourseDAO instance;
-    private static String DB_TABLE_NAME="StudentCourse";
+    public static String DB_TABLE_NAME="StudentCourse";
 
     public static StudentCourseDAO getInstance() {
         if (StudentCourseDAO.instance == null) {

@@ -1,5 +1,8 @@
 package com.example.triolingo_mobile.DAO;
 
+import android.text.TextUtils;
+import android.util.Patterns;
+
 import com.example.triolingo_mobile.DataAccess.DbContext;
 import com.example.triolingo_mobile.Model.UserEntity;
 import com.example.triolingo_mobile.Model.UserModel;
@@ -69,7 +72,7 @@ public class UserDAO extends DbContext {
     }
 
     public UserEntity Login(UserModel us) {
-        String sql = "select * from " + DB_TABLE_NAME + " where " + EMAIL_COLUMN + " = " + us.getEmail() + " and " + PASSWORD_COLUMN + " = " + us.getPassword();
+        String sql = "select * from " + DB_TABLE_NAME + " where " + EMAIL_COLUMN + " = '" + us.getEmail() + "' and " + PASSWORD_COLUMN + " = '" + us.getPassword()+"' AND STATUS>0";
         ResultSet rs = getData(sql);
         try {
             if (rs.next()) {
@@ -87,6 +90,22 @@ public class UserDAO extends DbContext {
             throw new RuntimeException(e);
         }
         return null;
+    }
+
+    public boolean IsValidEmail(String email) {
+        return (!TextUtils.isEmpty(email) && Patterns.EMAIL_ADDRESS.matcher(email).matches());
+    }
+    public boolean IsExistEmail(String email){
+        String sql = "select * from " + DB_TABLE_NAME + " where " + EMAIL_COLUMN + " = '" + email+"'";
+        ResultSet rs = getData(sql);
+        try {
+            if (rs.next()) {
+                return false;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return true;
     }
 
 }

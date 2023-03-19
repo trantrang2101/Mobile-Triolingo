@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.example.triolingo_mobile.Course.CourseDescriptionActivity;
 import com.example.triolingo_mobile.DAO.LessonDAO;
+import com.example.triolingo_mobile.DAO.StudentCourseDAO;
 import com.example.triolingo_mobile.DAO.StudentLessonDAO;
 import com.example.triolingo_mobile.Model.LessonModel;
 import com.example.triolingo_mobile.Model.StudentCourse;
@@ -72,12 +73,14 @@ public class UnitHolder extends RecyclerView.ViewHolder {
             UserEntity userLogin = gson.fromJson(json, UserEntity.class);
             userId = userLogin.getId();
         }
-        List<StudentLesson> list = StudentLessonDAO.getInstance().getList("LessionId in (select id from [Lesson] Where [UnitId]="+unit.getId()+") AND StudentCourseId in (select id from [StudentCourse] Where StudentId="+userId+")");
-        List<LessonModel> listResult = LessonDAO.getInstance().getList("UnitId="+unit.getId());
+        StudentCourse studentCourse = StudentCourseDAO.getInstance().getList("StudentId="+userId+" AND CourseId="+unit.getCourseId()).get(0);
+        List<StudentLesson> list = StudentLessonDAO.getInstance().getList("LessionId in (select id from [Lesson] Where [UnitId]="+unit.getId()+") AND StudentCourseId ="+studentCourse.getId());
+        List<LessonModel> listResult = LessonDAO.getInstance().getList("Status>0 AND UnitId="+unit.getId());
         listResult.get(0).setPreviousActived(true);
         for (int i = 0; i< listResult.size();i++) {
             int index= list.stream().map(StudentLesson::getLessonId).collect(Collectors.toList()).indexOf(listResult.get(i).getId());
             listResult.get(i).setUserMark(index!=-1?list.get(index).getMark():-1);
+            listResult.get(i).setStudentCourse(studentCourse.getId());
             if(i<listResult.size()-1){
                 listResult.get(i+1).setPreviousActived(index!=-1);
             }

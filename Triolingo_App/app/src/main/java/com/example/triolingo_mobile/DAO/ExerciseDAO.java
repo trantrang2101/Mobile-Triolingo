@@ -50,9 +50,9 @@ public class ExerciseDAO extends DbContext {
         return list;
     }
 
-    public ArrayList<Exercise> getExerciseOfLesson(String lessonId){
+    public ArrayList<Exercise> getExerciseOfLesson(String search){
         ArrayList<Exercise> list = new ArrayList<>();
-        String sql = "select * from " +  EXERCISE_TABLE+ " where LessonId = " + lessonId;
+        String sql = "select * from " +  EXERCISE_TABLE+ " where "+search;
         ResultSet rs = getData(sql);
         try{
             while (rs.next()){

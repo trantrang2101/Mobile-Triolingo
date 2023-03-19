@@ -21,6 +21,7 @@ import com.example.triolingo_mobile.Lesson.WordMatching.WordMatchingActivity;
 import com.example.triolingo_mobile.Model.Exercise;
 import com.example.triolingo_mobile.Model.Question;
 import com.example.triolingo_mobile.R;
+import com.example.triolingo_mobile.Units.ListUnits;
 
 import java.util.ArrayList;
 
@@ -28,10 +29,17 @@ public class LessonUtil {
 
     private static ArrayList<Exercise> listExercise;
     private static ArrayList<Question> listQuestion;
-    private static int currentExerciseNo;
-
+    private static int currentExerciseNo,courseStudentId;
     public static void setListExercise(ArrayList<Exercise> listExercise) {
         LessonUtil.listExercise = listExercise;
+    }
+
+    public static int getCourseStudentId() {
+        return courseStudentId;
+    }
+
+    public static void setCourseStudentId(int courseStudentId) {
+        LessonUtil.courseStudentId = courseStudentId;
     }
 
     public static ArrayList<Question> getListQuestion() {
@@ -43,7 +51,8 @@ public class LessonUtil {
         int progressPercent = (int)100/listExercise.size();
         if (exerciseNo == listExercise.size()){
             Intent intent = new Intent(c, LessonFinishActivity.class);
-
+            intent.putExtra("lessonId",listExercise.get(0).getLessonId());
+            intent.putExtra("courseStudentId", getCourseStudentId());
             intent.putExtra("curPoint", curPoint);
             intent.putExtra("totalPoint", totalPoint);
             intent.putExtra("progressPercent", progressPercent);
@@ -62,22 +71,21 @@ public class LessonUtil {
                 intent.putExtra("exerciseId", currentEx.getId());
                 c.startActivity(intent);
             }else{
-                listQuestion = QuestionDAO.getInstance().getQuestionsByExId(currentEx.getId());
+                listQuestion = QuestionDAO.getInstance().getQuestionsByExId(currentEx.getId(),"STATUS>0");
                 if(listQuestion.size()>0){
-                    nextQuestion(0,curPoint, totalPoint,
-                            curProgress, progressPercent , c);
+                    nextQuestion(0,curPoint, totalPoint, curProgress,c);
                 }else{
-                    nextExercise(exerciseNo+1,curPoint,totalPoint,curProgress,c);
+                    nextExercise(exerciseNo+1,curPoint,totalPoint,0,c);
                 }
             }
         }
     }
 
     public static void nextQuestion(int questionNo, int curPoint,
-                                    int totalPoint, int curProgress, int progressPercent,  Context c){
-//        int progressPercent = (int)100/listQuestion.size();
+                                    int totalPoint, int curProgress, Context c){
+        int progressPercent = (int)100/listQuestion.size();
         if (questionNo == listQuestion.size()){
-            nextExercise(currentExerciseNo+1,curPoint,totalPoint,curProgress,c);
+            nextExercise(currentExerciseNo+1,curPoint,totalPoint,0,c);
         } else {
             Intent intent;
             switch (listExercise.get(currentExerciseNo).getTypeId()){
@@ -141,6 +149,9 @@ public class LessonUtil {
             public void onClick(View view) {
 //                TODO: quit lesson and go back to lesson list
                 Toast.makeText(c, "quit lesson", Toast.LENGTH_SHORT).show();
+                Intent i = new Intent(view.getContext(), ListUnits.class);
+                i.putExtra("id",listExercise.get(0).getLesson().getUnit().getCourseId());
+                view.getContext().startActivity(i);
             }
         });
 

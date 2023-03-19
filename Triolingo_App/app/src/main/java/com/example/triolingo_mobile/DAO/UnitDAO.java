@@ -41,4 +41,24 @@ public class UnitDAO extends DbContext {
         }
         return list;
     }
+    public UnitModel getDetail(int unitId) {
+        String sql = "Select * from "+DB_TABLE_NAME+" where ID= "+unitId;
+        ResultSet rs = getData(sql);
+        try {
+            while (rs.next()) {
+                UnitModel c = new UnitModel();
+                c.setName(rs.getString("Name"));
+                c.setDescription(rs.getString("Description"));
+                c.setNote(rs.getString("Note"));
+                c.setStatus(rs.getInt("Status"));
+                c.setId(rs.getInt("Id"));
+                c.setCourseId(rs.getInt("CourseId"));
+                return c;
+            }
+            rs.close();
+        } catch (Exception ex) {
+
+        }
+        return null;
+    }
 }

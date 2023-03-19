@@ -48,15 +48,15 @@ public class SettingProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting_profile);
-//        SharedPreferences sharedPref = getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
-//        String json = sharedPref.getString("user", null);
-//        int userId = 0;
-//        if (json != null) {
-//            Gson gson = new Gson();
-//            UserEntity userLogin = gson.fromJson(json, UserEntity.class);
-//            userId = userLogin.getId();
-//        }
-        us = UserDAO.getInstance().GetUserById(1);
+        SharedPreferences sharedPref = getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
+        String json = sharedPref.getString("user", null);
+        int userId = 0;
+        if (json != null) {
+            Gson gson = new Gson();
+            UserEntity userLogin = gson.fromJson(json, UserEntity.class);
+            userId = userLogin.getId();
+        }
+        us = UserDAO.getInstance().GetUserById(userId);
         email = findViewById(R.id.editTextTextEmailAddress);
         email.setText(us.getEmail());
         name = findViewById(R.id.editTextTextPersonName);

@@ -14,6 +14,12 @@ public class StudentLesson {
     public StudentLesson() {
     }
 
+    public StudentLesson(int mark, int lessonId, int studentCourseId) {
+        this.mark = mark;
+        this.lessonId = lessonId;
+        this.studentCourseId = studentCourseId;
+    }
+
     public StudentLesson(int id, int mark, int lessonId, int studentCourseId) {
         this.id = id;
         this.mark = mark;

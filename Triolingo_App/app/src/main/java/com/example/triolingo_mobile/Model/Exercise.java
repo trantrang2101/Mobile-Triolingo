@@ -1,5 +1,7 @@
 package com.example.triolingo_mobile.Model;
 
+import com.example.triolingo_mobile.DAO.LessonDAO;
+
 import java.io.Serializable;
 
 public class Exercise implements Serializable {
@@ -68,6 +70,9 @@ public class Exercise implements Serializable {
 
     public int getLessonId() {
         return lessonId;
+    }
+    public LessonModel getLesson() {
+        return LessonDAO.getInstance().getDetail(getLessonId());
     }
 
     public void setLessonId(int lessonId) {

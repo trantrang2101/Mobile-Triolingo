@@ -62,7 +62,7 @@ public class ListenChoiceActivity extends AppCompatActivity {
         curPoint += intent.getIntExtra("curPoint", -1);
         totalPoint += intent.getIntExtra("totalPoint", -1);
         int curProgress = intent.getIntExtra("curProgress", -1);
-
+        progressBar.setProgress(curProgress);
         Question question = LessonUtil.getListQuestion().get(quesNo);
         ArrayList<AnswerModel> ansList = exDao.getAnswerOfQuestion(question.getId(),"STATUS>0");
         Collections.shuffle(ansList);
@@ -182,7 +182,9 @@ public class ListenChoiceActivity extends AppCompatActivity {
                                     @Override
                                     public void onClick(View view) {
                                         mediaPlayer.stop();
-                                        LessonUtil.nextExercise(quesNo+1,curPoint,totalPoint,curProgress,ListenChoiceActivity.this);
+                                        LessonUtil.nextQuestion(quesNo+1, curPoint,
+                                                totalPoint,curProgress + progressPercent,
+                                                ListenChoiceActivity.this);
                                     }
                                 });
                             }

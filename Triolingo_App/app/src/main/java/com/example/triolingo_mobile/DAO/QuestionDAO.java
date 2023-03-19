@@ -24,9 +24,9 @@ public class QuestionDAO extends DbContext {
         return QuestionDAO.instance;
     }
 
-    public ArrayList<Question> getQuestionsByExId(int exId){
+    public ArrayList<Question> getQuestionsByExId(int exId,String search){
         ArrayList<Question> list = new ArrayList<>();
-        String sql = "select * from " +  DB_TABLE_NAME+ " where ExerciseId = " + exId;
+        String sql = "select * from " +  DB_TABLE_NAME+ " where ExerciseId = " + exId +(search!=null&&search.trim()!=""?(" AND "+search):"");
         ResultSet rs = getData(sql);
         try{
             while (rs.next()){
@@ -46,25 +46,9 @@ public class QuestionDAO extends DbContext {
         return list;
     }
 
-    public int getMarkByExercise(int exid){
-        Integer sum= 0;
-        String sql ="select sum(Mark) as Mark from "+DB_TABLE_NAME+" where ExerciseId ="+exid;
-        ResultSet rs = getData(sql);
-        try {
-            while (rs.next()) {
-                sum = rs.getInt("Mark");
-            }
-            rs.close();
-        } catch (Exception ex) {
-
-        }
-
-        return sum;
-    }
-
     public int getMarkByLesson(int lessonid){
         Integer sum= 0;
-        String sql ="select sum(Mark) as Mark from "+DB_TABLE_NAME+" where ExerciseId in (select id from Exercise where LessonId="+lessonid+")";
+        String sql ="select sum(Mark) as Mark from "+DB_TABLE_NAME+" where ExerciseId in (select id from Exercise where LessonId="+lessonid+" AND STATUS>0) AND STATUS>0";
         ResultSet rs = getData(sql);
         try {
             while (rs.next()) {

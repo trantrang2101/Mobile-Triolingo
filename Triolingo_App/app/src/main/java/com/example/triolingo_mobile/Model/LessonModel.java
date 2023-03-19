@@ -1,5 +1,7 @@
 package com.example.triolingo_mobile.Model;
 
+import com.example.triolingo_mobile.DAO.UnitDAO;
+
 public class LessonModel {
     private int id;
     private String name;
@@ -11,6 +13,16 @@ public class LessonModel {
     private int totalMark;
     private int userMark;
     private boolean isPreviousActived;
+    private int studentCourse;
+
+    public int getStudentCourse() {
+        return studentCourse;
+    }
+
+    public void setStudentCourse(int studentCourse) {
+        this.studentCourse = studentCourse;
+    }
+
     public boolean isPreviousActived() {
         return isPreviousActived;
     }
@@ -65,6 +77,10 @@ public class LessonModel {
 
     public int getUnitId() {
         return unitId;
+    }
+
+    public UnitModel getUnit() {
+        return UnitDAO.getInstance().getDetail(getUnitId());
     }
 
     public void setUnitId(int unitId) {

@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.*;
 
 import com.example.triolingo_mobile.DAO.AccountDAO;
+import com.example.triolingo_mobile.DAO.UserDAO;
 import com.example.triolingo_mobile.Model.AccountModel;
 
 import java.io.ByteArrayOutputStream;
@@ -123,19 +124,27 @@ public class RegisterActivity extends AppCompatActivity {
 
     boolean checkRegisterInfo() {
         if (email_txt.getText().toString().trim().isEmpty()) {
-            Toast.makeText(this, "Email không được để trống!", Toast.LENGTH_SHORT).show();
+            email_txt.setError("Email không được để trống");
             return false;
         }
-        else if (name_txt.getText().toString().trim().isEmpty()) {
-            Toast.makeText(this, "Họ tên không được để trống", Toast.LENGTH_SHORT).show();
+        if(!UserDAO.getInstance().IsValidEmail(email_txt.getText().toString())){
+            email_txt.setError("Email không hợp lệ");
             return false;
         }
-        else if (password_txt.getText().toString().trim().isEmpty()) {
-            Toast.makeText(this, "Mật khẩu không được để trống", Toast.LENGTH_SHORT).show();
+        if(!UserDAO.getInstance().IsExistEmail(email_txt.getText().toString())){
+            email_txt.setError("Email đã được đăng ký rồi");
             return false;
         }
-        else if (confirm_pw_txt.getText().toString().compareTo(password_txt.getText().toString()) != 0) {
-            Toast.makeText(this, "Mật khẩu nhập lại không khớp!", Toast.LENGTH_SHORT).show();
+        if (name_txt.getText().toString().trim().isEmpty()) {
+            name_txt.setError("Họ tên không được để trống");
+            return false;
+        }
+        if (password_txt.getText().toString().trim().isEmpty()) {
+            password_txt.setError("Mật khẩu không được để trống");
+            return false;
+        }
+        if (confirm_pw_txt.getText().toString().compareTo(password_txt.getText().toString()) != 0) {
+            confirm_pw_txt.setError("Mật khẩu nhập lại không khớp!");
             return false;
         }
         return true;

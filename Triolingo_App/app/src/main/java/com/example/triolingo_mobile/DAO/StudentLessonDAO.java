@@ -4,6 +4,7 @@ import com.example.triolingo_mobile.DataAccess.DbContext;
 import com.example.triolingo_mobile.Model.StudentCourse;
 import com.example.triolingo_mobile.Model.StudentLesson;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +40,55 @@ public class StudentLessonDAO extends DbContext {
         }
         return list;
     }
+
+    public boolean createStudentLesson(StudentLesson studentLesson){
+        boolean check = false;
+        String sql = "Insert into "+DB_TABLE_NAME+" (LessionId,StudentCourseId,Mark) Values (?,?,?)";
+        try {
+            PreparedStatement pre = conn.prepareStatement(sql);
+            pre.setInt(1, studentLesson.getLessonId());
+            pre.setInt(2, studentLesson.getStudentCourseId());
+            pre.setInt(3,studentLesson.getMark());
+            check = pre.executeUpdate() > 0;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return check;
+    }
+
+    public boolean updateStudentLesson(StudentLesson studentLesson){
+        boolean check = false;
+        String sql = "UPDATE "+DB_TABLE_NAME+" SET [Mark] = ? WHERE LessionId = ? AND StudentCourseId = ?";
+        try {
+            PreparedStatement pre = conn.prepareStatement(sql);
+            pre.setInt(1,studentLesson.getMark());
+            pre.setInt(2, studentLesson.getLessonId());
+            pre.setInt(3, studentLesson.getStudentCourseId());
+            check = pre.executeUpdate() > 0;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return check;
+    }
+    public StudentLesson getDetail(int studentCourse,int lessonId) {
+        String sql = "Select * from "+DB_TABLE_NAME+" where LessionId= "+lessonId+" AND StudentCourseId="+studentCourse;
+        ResultSet rs = getData(sql);
+        try {
+            while (rs.next()) {
+                StudentLesson c = new StudentLesson();
+                c.setId(rs.getInt("Id"));
+                c.setMark(rs.getInt("Mark"));
+                c.setLessonId(rs.getInt("LessionId"));
+                c.setStudentCourseId(rs.getInt("StudentCourseId"));
+                return c;
+            }
+            rs.close();
+        } catch (Exception ex) {
+
+        }
+        return null;
+    }
+
     public StudentLesson getDetail(int id) {
         String sql = "Select * from "+DB_TABLE_NAME+" where id= "+id;
         ResultSet rs = getData(sql);

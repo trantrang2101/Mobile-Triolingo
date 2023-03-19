@@ -73,6 +73,17 @@
             android:text="Đăng nhập"
             android:textColor="#FFFFFF" />
 
+        <Button
+            android:id="@+id/signInBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="10dp"
+            android:height="60dp"
+            android:backgroundTint="#5E756969"
+            android:onClick="LoginBtn"
+            android:text="Đăng ký tài khoản"
+            android:textColor="#FFFFFF" />
+
         <TextView
             android:id="@+id/textView2"
             android:layout_width="match_parent"
@@ -81,7 +92,8 @@
             android:text="QUÊN MẬT KHẨU"
             android:textAlignment="center"
             android:textColor="#5877D6"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            tools:visibility="gone" />
 
         <LinearLayout
             android:layout_width="match_parent"

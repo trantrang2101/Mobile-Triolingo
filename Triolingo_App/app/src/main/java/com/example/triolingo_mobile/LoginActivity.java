@@ -55,6 +55,13 @@ public class LoginActivity extends AppCompatActivity {
                 return false;
             }
         });
+        (findViewById(R.id.signInBtn)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(LoginActivity.this,RegisterActivity.class);
+                startActivity(intent);
+            }
+        });
         InputPassword.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
@@ -83,8 +90,8 @@ public class LoginActivity extends AppCompatActivity {
         String Password = InputPassword.getText().toString().trim();
         UserModel userLogin = new UserModel(Email, Password);
         UserEntity us = UserDAO.getInstance().Login(userLogin);
-        if (us != null) {
-            InputUsername.setError("Username or Password not correct");
+        if (us == null) {
+            InputUsername.setError("Email hoặc mật khẩu không khớp");
         } else {
             Gson gson = new Gson();
             String userJson = gson.toJson(us);

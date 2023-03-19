@@ -38,10 +38,11 @@ public class LessonHolder extends RecyclerView.ViewHolder {
     public void onClick(View view) {
         ExerciseDAO exDao = ExerciseDAO.getInstance();
         String lessonId = edit_id.getText().toString();
-        ArrayList<Exercise> listExercise = exDao.getExerciseOfLesson(lessonId);
+        ArrayList<Exercise> listExercise = exDao.getExerciseOfLesson( "STATUS>0 AND LessonId = "+lessonId);
 
         if(listExercise.size()>0){
             LessonUtil.setListExercise(listExercise);
+            LessonUtil.setCourseStudentId(lesson.getStudentCourse());
             LessonUtil.nextExercise( 0, 0, 0, 0, itemView.getContext());
         }
     }
@@ -62,8 +63,5 @@ public class LessonHolder extends RecyclerView.ViewHolder {
         if(lesson.isPreviousActived()){
             bindingAction(itemView);
         }
-    }
-    public void setTranslationX(float translationX) {
-        card.setTranslationX(translationX);
     }
 }
