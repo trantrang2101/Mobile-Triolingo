@@ -43,6 +43,7 @@ public class WordListAdapter extends RecyclerView.Adapter<WordItemHolder> {
             if (returnCd == 0 && oldSelected != null) {
                 // unselect any selected one
                 oldSelected.UnSelect();
+                oldSelected = holder;
             }
             else if (returnCd != 0) {
                 oldSelected = null;
@@ -69,7 +70,7 @@ public class WordListAdapter extends RecyclerView.Adapter<WordItemHolder> {
 
     void MarkAllIncorrect() {
         for (WordItemHolder item : _cache) {
-            if (item.isClickable()) {
+            if (item != null && item.isClickable()) {
                 item.setButtonBg(-1);
             }
         }

@@ -52,7 +52,7 @@ public class WordItemHolder extends RecyclerView.ViewHolder {
     }
 
     public void UnSelect() {
-        btn.setBackgroundResource(R.drawable.custom_word_btn_normal);
+        btn.setBackground(normal);
         btn.setEnabled(true);
         btn.setClickable(true);
     }

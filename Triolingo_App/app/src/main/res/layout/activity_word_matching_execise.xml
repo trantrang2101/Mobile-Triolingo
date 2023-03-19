@@ -27,13 +27,13 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/question_recyclerview"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/answer_recyclerview"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1">
 
@@ -48,7 +48,7 @@
         android:layout_marginBottom="15dp"
         android:background="@drawable/custom_btn_continue"
         android:clickable="true"
-        android:text="Tiếp tục"
+        android:text="@string/btn_check"
         android:textColor="@color/text_check_ans"
         android:textStyle="bold"
         app:backgroundTint="@color/btn_check_ans"

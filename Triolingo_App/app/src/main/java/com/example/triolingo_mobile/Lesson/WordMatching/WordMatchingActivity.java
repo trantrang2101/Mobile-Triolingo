@@ -166,7 +166,7 @@ public class WordMatchingActivity extends AppCompatActivity {
                 exerciseId + 1,
                 intent.getIntExtra("curPoint", 0) + curPoint,
                 intent.getIntExtra("totalPoint", 0),
-                intent.getIntExtra("progressPercent", 0),
+                intent.getIntExtra("progressPercent", 0) + 100/LessonUtil.getLoadedExerciseCount(),
                 WordMatchingActivity.this);
     }
 }
