@@ -2,16 +2,19 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content" >
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/word_match_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/custom_btn_ans"
+        android:layout_margin="15dp"
+        android:background="@drawable/custom_word_btn_normal"
+        android:padding="25dp"
+        android:text="test"
         android:textColor="@color/black"
-        app:backgroundTint="@null"
+        android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
