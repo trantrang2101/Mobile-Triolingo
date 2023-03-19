@@ -156,4 +156,8 @@ public class LessonUtil {
         });
 
     }
+
+    public static int getLoadedExerciseCount() {
+        return listExercise == null ? 0 : listExercise.size();
+    }
 }

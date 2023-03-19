@@ -94,6 +94,13 @@
                 android:value="" />
         </activity>
         <activity
+            android:name=".Lesson.WordMatching.WordMatchingActivity"
+            android:exported="true">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".Lesson.ListenChoice.ListenChoiceActivity"
             android:exported="false">
             <meta-data
