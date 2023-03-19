@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 
 import com.example.triolingo_mobile.DAO.ExerciseDAO;
 import com.example.triolingo_mobile.DAO.LessonDAO;
@@ -34,8 +35,10 @@ public class WordMatchingActivity extends AppCompatActivity {
     private WordListAdapter questionAdapter;
     private WordListAdapter answerAdapter;
     private List<Question> questions;
+    private ProgressBar progressBar;
 
-    private int exerciseId;
+    private int exerciseNo;
+    private int totalPoint;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,14 +47,18 @@ public class WordMatchingActivity extends AppCompatActivity {
         questionColumn = findViewById(R.id.question_recyclerview);
         answerColumn = findViewById(R.id.answer_recyclerview);
         continueBtn = findViewById(R.id.word_match_continue);
+        progressBar = findViewById(R.id.include4).findViewById(R.id.lesson_progressBar);
 
         GetQuestionData();
     }
 
     void GetQuestionData() {
         Intent intent = getIntent();
-        exerciseId = intent.getIntExtra("exerciseId", 11);
+        int exerciseId = intent.getIntExtra("exerciseId", -1);
+        exerciseNo = intent.getIntExtra("exerciseNo", -1);
         questions = QuestionDAO.getInstance().getQuestionsByExId(exerciseId,"STATUS>0");
+        int progressNum = LessonUtil.getLoadedExerciseCount() > 0 ? 100*exerciseNo/LessonUtil.getLoadedExerciseCount() : 0;
+        progressBar.setProgress(progressNum);
         curPoint = 0;
         QuestionColumn = new HashMap<>();
         AnswerColumn = new HashMap<>();
@@ -64,10 +71,11 @@ public class WordMatchingActivity extends AppCompatActivity {
             }
         }
 
-        questionAdapter = new WordListAdapter(QuestionColumn, this::OnQuestionClick);
+        totalPoint = curPoint;
+        questionAdapter = new WordListAdapter(QuestionColumn, this::OnQuestionClick, false);
         questionColumn.setAdapter(questionAdapter);
         questionColumn.setLayoutManager(new LinearLayoutManager(this));
-        answerAdapter = new WordListAdapter(AnswerColumn, this::OnAnswerClick);
+        answerAdapter = new WordListAdapter(AnswerColumn, this::OnAnswerClick, true);
         answerColumn.setAdapter(answerAdapter);
         answerColumn.setLayoutManager(new LinearLayoutManager(this));
         continueBtn.setOnClickListener(this::OnClickContinue);
@@ -89,7 +97,7 @@ public class WordMatchingActivity extends AppCompatActivity {
             questionAdapter.FinalizeLastSelected(isCorrect);
             RemoveWord(isCorrect);
             DeselectAll();
-            return isCorrect ? 1 : -1;
+            return isCorrect ? 1 : QuestionColumn.size() > 0 ? -1 : -2;
         }
     }
 
@@ -107,7 +115,6 @@ public class WordMatchingActivity extends AppCompatActivity {
             }
         }
         QuestionColumn.remove(selectedQuestion);
-        AnswerColumn.remove(selectedAnswer);
         if (IsFinished()) {
             // next exercise
             for (int qId : QuestionColumn.values()) {
@@ -126,10 +133,6 @@ public class WordMatchingActivity extends AppCompatActivity {
     }
 
     boolean IsFinished() {
-        if (QuestionColumn.size() == 1) {
-            // only 1 left
-            return true;
-        }
         for (int question : QuestionColumn.values()) {
             for (int answer : AnswerColumn.values()) {
                 if (answer == question) {
@@ -151,6 +154,7 @@ public class WordMatchingActivity extends AppCompatActivity {
             // selected a question, then an answer
             boolean isCorrect = QuestionColumn.get(selectedQuestion) == AnswerColumn.get(selectedAnswer);
             answerAdapter.FinalizeLastSelected(isCorrect);
+            questionAdapter.SetLastQuestionWrong();
             RemoveWord(isCorrect);
             DeselectAll();
             return isCorrect ? 1 : -1;
@@ -164,11 +168,13 @@ public class WordMatchingActivity extends AppCompatActivity {
 
     void OnClickContinue(View v) {
         Intent intent = getIntent();
+        int nowProgress = LessonUtil.getLoadedExerciseCount() > 0 ? 100*(exerciseNo + 1)/LessonUtil.getLoadedExerciseCount() : 100;
+        progressBar.setProgress(nowProgress);
         LessonUtil.nextExercise(
-                exerciseId + 1,
+                exerciseNo + 1,
                 intent.getIntExtra("curPoint", 0) + curPoint,
-                intent.getIntExtra("totalPoint", 0),
-                intent.getIntExtra("progressPercent", 0) + 100/LessonUtil.getLoadedExerciseCount(),
+                intent.getIntExtra("totalPoint", 0) + totalPoint,
+                nowProgress,
                 WordMatchingActivity.this);
     }
 }

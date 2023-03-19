@@ -37,6 +37,7 @@ public class WordItemHolder extends RecyclerView.ViewHolder {
     public void setButtonBg(int cd) {
         switch(cd) {
             case -1:
+            case -2:
                 btn.setBackground(normal);
                 btn.setEnabled(false);
                 break;
