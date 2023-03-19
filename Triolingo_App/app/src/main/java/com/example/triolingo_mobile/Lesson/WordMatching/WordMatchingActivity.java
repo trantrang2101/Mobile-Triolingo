@@ -1,6 +1,7 @@
 package com.example.triolingo_mobile.Lesson.WordMatching;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -119,6 +120,7 @@ public class WordMatchingActivity extends AppCompatActivity {
             }
             questionAdapter.MarkAllIncorrect();
             answerAdapter.MarkAllIncorrect();
+            continueBtn.setBackgroundTintList(ContextCompat.getColorStateList(this,R.color.progressbar_process));
             continueBtn.setEnabled(true);
         }
     }

@@ -41,17 +41,17 @@
 
     </LinearLayout>
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/word_match_continue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="15dp"
         android:background="@drawable/custom_btn_continue"
+        android:backgroundTint="@color/btn_check_ans"
         android:clickable="true"
         android:text="@string/btn_check"
-        android:textColor="@color/text_check_ans"
+        android:textColor="#000000"
         android:textStyle="bold"
-        app:backgroundTint="@color/btn_check_ans"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"

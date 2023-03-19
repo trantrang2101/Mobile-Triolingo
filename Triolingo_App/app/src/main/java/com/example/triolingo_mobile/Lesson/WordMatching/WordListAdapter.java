@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.triolingo_mobile.R;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -20,7 +21,12 @@ public class WordListAdapter extends RecyclerView.Adapter<WordItemHolder> {
     private List<WordItemHolder> _cache;
 
     public WordListAdapter(HashMap<String, Integer> wordMap, OnWordItemClick listener) {
-        this.wordMap = wordMap;
+        List<String> shuffleList = new ArrayList<>(wordMap.keySet());
+        Collections.shuffle(shuffleList);
+        this.wordMap = new HashMap<>();
+        for (String word : shuffleList) {
+            this.wordMap.put(word, wordMap.get(word));
+        }
         this._listener = listener;
         this._cache = new ArrayList<>();
         oldSelected = null;
