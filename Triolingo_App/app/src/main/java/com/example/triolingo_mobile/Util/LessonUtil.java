@@ -12,33 +12,74 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.Toast;
 
+import com.example.triolingo_mobile.DAO.QuestionDAO;
 import com.example.triolingo_mobile.Lesson.LessonFinishActivity;
 import com.example.triolingo_mobile.Lesson.ListenChoice.ListenChoiceActivity;
 import com.example.triolingo_mobile.Lesson.QuestionChoice.QuestionChoiceActivity;
 import com.example.triolingo_mobile.Lesson.Reading.ReadingActivity;
+import com.example.triolingo_mobile.Lesson.WordMatching.WordMatchingActivity;
 import com.example.triolingo_mobile.Model.Exercise;
+import com.example.triolingo_mobile.Model.Question;
 import com.example.triolingo_mobile.R;
 
 import java.util.ArrayList;
 
 public class LessonUtil {
 
-    public static void nextExercise(ArrayList<Exercise> listExercise, int quesNo, int curPoint,
+    private static ArrayList<Exercise> listExercise;
+    private static ArrayList<Question> listQuestion;
+    private static int currentExerciseNo;
+
+    public static void setListExercise(ArrayList<Exercise> listExercise) {
+        LessonUtil.listExercise = listExercise;
+    }
+
+    public static ArrayList<Question> getListQuestion() {
+        return listQuestion;
+    }
+
+    public static void nextExercise(int exerciseNo, int curPoint,
                                     int totalPoint, int curProgress, Context c){
-        Intent intent;
         int progressPercent = (int)100/listExercise.size();
-        if (quesNo == listExercise.size()){
-            intent = new Intent(c, LessonFinishActivity.class);
+        if (exerciseNo == listExercise.size()){
+            Intent intent = new Intent(c, LessonFinishActivity.class);
 
             intent.putExtra("curPoint", curPoint);
             intent.putExtra("totalPoint", totalPoint);
             intent.putExtra("progressPercent", progressPercent);
             intent.putExtra("curProgress", curProgress);
+            c.startActivity(intent);
         } else {
-            Exercise nextExercise = listExercise.get(quesNo);
-            int type = nextExercise.getTypeId();
-            Log.i("next", "next type:" + type);
-            switch (type){
+            Exercise currentEx = listExercise.get(exerciseNo);
+            currentExerciseNo = exerciseNo;
+            Log.i("next", "next type:" + currentEx.getTypeId());
+            if(currentEx.getTypeId()==9){
+                Intent intent = new Intent(c, WordMatchingActivity.class);
+                intent.putExtra("progressPercent", progressPercent);
+                intent.putExtra("curPoint", curPoint);
+                intent.putExtra("totalPoint", totalPoint);
+                intent.putExtra("curProgress", curProgress);
+                intent.putExtra("exerciseId", currentEx.getId());
+                c.startActivity(intent);
+            }else{
+                listQuestion = QuestionDAO.getInstance().getQuestionsByExId(currentEx.getId());
+                if(listQuestion.size()>0){
+                    nextQuestion(0,0, QuestionDAO.getInstance().getMarkByExercise(currentEx.getId()), 0,c);
+                }else{
+                    nextExercise(exerciseNo+1,curPoint,totalPoint,curProgress,c);
+                }
+            }
+        }
+    }
+
+    public static void nextQuestion(int questionNo, int curPoint,
+                                    int totalPoint, int curProgress, Context c){
+        int progressPercent = (int)100/listQuestion.size();
+        if (questionNo == listQuestion.size()){
+            nextExercise(currentExerciseNo+1,curPoint,totalPoint,curProgress,c);
+        } else {
+            Intent intent;
+            switch (listExercise.get(currentExerciseNo).getTypeId()){
                 case 7:
                     intent = new Intent(c, ReadingActivity.class);
                     break;
@@ -52,15 +93,14 @@ public class LessonUtil {
                     intent = new Intent();
                     break;
             }
-            intent.putExtra("listExercise", listExercise);
             intent.putExtra("progressPercent", progressPercent);
-            Log.i("next", "quesL:"+listExercise.size());
-            intent.putExtra("quesNo", quesNo);
             intent.putExtra("curPoint", curPoint);
             intent.putExtra("totalPoint", totalPoint);
             intent.putExtra("curProgress", curProgress);
+            intent.putExtra("quesNo", questionNo);
+            Log.i("next", "quesL:"+listQuestion.size());
+            c.startActivity(intent);
         }
-        c.startActivity(intent);
     }
 
     // when click close icon or click go back in control

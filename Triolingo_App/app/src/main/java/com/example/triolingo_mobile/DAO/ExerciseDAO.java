@@ -25,6 +25,31 @@ public class ExerciseDAO extends DbContext {
         return ExerciseDAO.instance;
     }
 
+    public Exercise getExercise(int id){
+        Exercise list = null;
+        String sql = "select * from " +  EXERCISE_TABLE+ " where Id = " + id;
+        ResultSet rs = getData(sql);
+        try{
+            while (rs.next()){
+                Exercise e = new Exercise();
+                e.setId(rs.getInt("Id"));
+                e.setStatus(rs.getInt("Status"));
+                e.setTitle(rs.getString("Title"));
+                e.setDescription(rs.getString("Description"));
+                e.setTypeId(rs.getInt("TypeId"));
+                e.setLessonId(rs.getInt("LessonId"));
+                e.setFile(rs.getString("File"));
+                e.setFileName(rs.getString("FileName"));
+                list = e;
+            }
+            rs.close();
+        }
+        catch (Exception ex) {
+            Log.d("sql error", "error in ExerciseDAO");
+        }
+        return list;
+    }
+
     public ArrayList<Exercise> getExerciseOfLesson(String lessonId){
         ArrayList<Exercise> list = new ArrayList<>();
         String sql = "select * from " +  EXERCISE_TABLE+ " where LessonId = " + lessonId;
@@ -67,9 +92,9 @@ public class ExerciseDAO extends DbContext {
         return null;
     }
 
-    public ArrayList<AnswerModel> getAnswerOfQuestion(int quesId){
+    public ArrayList<AnswerModel> getAnswerOfQuestion(int quesId,String search){
         ArrayList<AnswerModel> list = new ArrayList<>();
-        String sql = "select * from " +  ANSWER_TABLE+ " where QuestionId = " + quesId;
+        String sql = "select * from " +  ANSWER_TABLE+ " where QuestionId = " + quesId +" AND "+search;
         ResultSet rs = getData(sql);
         try{
             while (rs.next()){

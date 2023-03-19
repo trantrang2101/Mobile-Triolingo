@@ -1,6 +1,9 @@
 package com.example.triolingo_mobile.DAO;
 
+import android.util.Log;
+
 import com.example.triolingo_mobile.DataAccess.DbContext;
+import com.example.triolingo_mobile.Model.Exercise;
 import com.example.triolingo_mobile.Model.LessonModel;
 import com.example.triolingo_mobile.Model.Question;
 import com.example.triolingo_mobile.Model.StudentCourse;
@@ -19,6 +22,43 @@ public class QuestionDAO extends DbContext {
             QuestionDAO.instance = new QuestionDAO();
         }
         return QuestionDAO.instance;
+    }
+
+    public ArrayList<Question> getQuestionsByExId(int exId){
+        ArrayList<Question> list = new ArrayList<>();
+        String sql = "select * from " +  DB_TABLE_NAME+ " where ExerciseId = " + exId;
+        ResultSet rs = getData(sql);
+        try{
+            while (rs.next()){
+                Question e = new Question();
+                e.setId(rs.getInt("Id"));
+                e.setStatus(rs.getInt("Status"));
+                e.setQuestion1(rs.getString("Question1"));
+                e.setMark(rs.getInt("Mark"));
+                list.add(e);
+            }
+            rs.close();
+        }
+        catch (Exception ex) {
+            Log.d("sql error", "error in ExerciseDAO");
+        }
+        return list;
+    }
+
+    public int getMarkByExercise(int exid){
+        Integer sum= 0;
+        String sql ="select sum(Mark) as Mark from "+DB_TABLE_NAME+" where ExerciseId ="+exid;
+        ResultSet rs = getData(sql);
+        try {
+            while (rs.next()) {
+                sum = rs.getInt("Mark");
+            }
+            rs.close();
+        } catch (Exception ex) {
+
+        }
+
+        return sum;
     }
 
     public int getMarkByLesson(int lessonid){
