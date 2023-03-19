@@ -64,6 +64,7 @@ public class LessonUtil {
             Log.i("next", "next type:" + currentEx.getTypeId());
             if(currentEx.getTypeId()==9){
                 Intent intent = new Intent(c, WordMatchingActivity.class);
+                intent.putExtra("exerciseNo", exerciseNo);
                 intent.putExtra("progressPercent", progressPercent);
                 intent.putExtra("curPoint", curPoint);
                 intent.putExtra("totalPoint", totalPoint);

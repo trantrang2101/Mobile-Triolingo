@@ -19,8 +19,9 @@ public class WordListAdapter extends RecyclerView.Adapter<WordItemHolder> {
     private OnWordItemClick _listener;
     private WordItemHolder oldSelected;
     private List<WordItemHolder> _cache;
+    private boolean isAnswer;
 
-    public WordListAdapter(HashMap<String, Integer> wordMap, OnWordItemClick listener) {
+    public WordListAdapter(HashMap<String, Integer> wordMap, OnWordItemClick listener, boolean isAnswer) {
         List<String> shuffleList = new ArrayList<>(wordMap.keySet());
         Collections.shuffle(shuffleList);
         this.wordMap = new HashMap<>();
@@ -30,6 +31,7 @@ public class WordListAdapter extends RecyclerView.Adapter<WordItemHolder> {
         this._listener = listener;
         this._cache = new ArrayList<>();
         oldSelected = null;
+        this.isAnswer = isAnswer;
     }
 
     @NonNull
@@ -37,6 +39,7 @@ public class WordListAdapter extends RecyclerView.Adapter<WordItemHolder> {
     public WordItemHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.lesson_word_matching_row, parent, false);
         WordItemHolder viewHolder = new WordItemHolder(v);
+        _cache.add(viewHolder);
         return viewHolder;
     }
 
@@ -57,14 +60,23 @@ public class WordListAdapter extends RecyclerView.Adapter<WordItemHolder> {
             else {
                 oldSelected = holder;
             }
-            holder.setButtonBg(returnCd);
+            if (isAnswer && returnCd == -1) {
+                holder.UnSelect();
+            } else {
+                holder.setButtonBg(returnCd);
+            }
         });
-        _cache.add(holder);
     }
 
     public void FinalizeLastSelected(boolean isCorrect) {
-        if (oldSelected != null) {
-            oldSelected.setButtonBg(isCorrect ? 1 : -1);
+        if (oldSelected != null && isCorrect) {
+            oldSelected.setButtonBg(1);
+        }
+        else if (oldSelected != null && isAnswer) {
+            oldSelected.UnSelect();
+        }
+        else if (oldSelected != null) {
+            oldSelected.setButtonBg(-1);
         }
         oldSelected = null;
     }
@@ -80,5 +92,12 @@ public class WordListAdapter extends RecyclerView.Adapter<WordItemHolder> {
                 item.setButtonBg(-1);
             }
         }
+    }
+
+    public void SetLastQuestionWrong() {
+        if (isAnswer || oldSelected == null) {
+            return;
+        }
+        oldSelected.setButtonBg(-1);
     }
 }
