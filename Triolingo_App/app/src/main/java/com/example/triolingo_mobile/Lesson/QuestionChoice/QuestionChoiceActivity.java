@@ -23,6 +23,7 @@ import com.example.triolingo_mobile.R;
 import com.example.triolingo_mobile.Util.LessonUtil;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -62,6 +63,7 @@ public class QuestionChoiceActivity extends AppCompatActivity {
 
         Question question = LessonUtil.getListQuestion().get(quesNo);
         ArrayList<AnswerModel> ansList = exDao.getAnswerOfQuestion(question.getId(),"STATUS>0");
+        Collections.shuffle(ansList);
         String ques = question.getQuestion1();
         totalPoint += question.getMark();
 
@@ -90,67 +92,71 @@ public class QuestionChoiceActivity extends AppCompatActivity {
             String idName = "lesson_ans_" + i;
             int id = getResources().getIdentifier(idName, "id", getPackageName());
             Button btn = (Button) findViewById(id);
-            listButton.add(btn);
-            btn.setText(choice.getAnswer());
-            if (choice.getId() == ans.getId()) crt_btn = btn;
-            btn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    // switch choice and change background
-                    if (currentClick != -1 && currentClick != id) {
-                        Button btnOld = (Button) findViewById(currentClick);
-                        btnOld.setBackgroundTintList(ContextCompat.getColorStateList(QuestionChoiceActivity.this, R.color.white));
-                    }
-                    currentClick = id;
-                    //set color for choose answer
-                    Button btn = (Button) view;
-                    btn.setBackgroundTintList(ContextCompat.getColorStateList(QuestionChoiceActivity.this, R.color.btn_ans_choice));
-                    if (btn.getText().equals(answer)) {
-                        currentAnswer = 1;
-                    } else {
-                        currentAnswer = 0;
-                    }
-                    Log.i("logQC", currentAnswer + "");
-
-                    // check answer button
-                    Button btnCheck = (Button) findViewById(R.id.button_check);
-                    btnCheck.setClickable(true);
-                    btnCheck.setTextColor(ContextCompat.getColorStateList(QuestionChoiceActivity.this, R.color.white));
-                    btnCheck.setBackgroundTintList(ContextCompat.getColorStateList(QuestionChoiceActivity.this, R.color.correct_text));
-                    btnCheck.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            // lock view after check answer
-                            lockButtons(listButton);
-                            ConstraintLayout footer = (ConstraintLayout) findViewById(R.id.include2);
-                            footer.setVisibility(View.GONE);
-                            Button continueBtn;
-//                            Toast.makeText(QuestionChoiceActivity.this, "click checks", Toast.LENGTH_SHORT).show();
-                            if (currentAnswer == 1) {
-                                ConstraintLayout cl = (ConstraintLayout) findViewById(R.id.answer_correct);
-                                cl.setVisibility(View.VISIBLE);
-                                continueBtn = findViewById(R.id.lesson_btn_continue1);
-                                curPoint += question.getMark();
-                            } else {
-                                ConstraintLayout cl = (ConstraintLayout) findViewById(R.id.answer_incorrect);
-                                cl.setVisibility(View.VISIBLE);
-                                continueBtn = findViewById(R.id.lesson_btn_continue0);
-                                crt_btn.setBackgroundTintList(ContextCompat.getColorStateList(QuestionChoiceActivity.this, R.color.correct_ans));
-                                btn.setBackgroundTintList(ContextCompat.getColorStateList(QuestionChoiceActivity.this, R.color.incorrect_ans));
-                            }
-                            progressBar.setProgress(curProgress + progressPercent);
-                            continueBtn.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    LessonUtil.nextQuestion(quesNo+1, curPoint,
-                                            totalPoint,curProgress + progressPercent,
-                                            QuestionChoiceActivity.this);
-                                }
-                            });
+            if(choice.getId()>0){
+                listButton.add(btn);
+                btn.setText(choice.getAnswer());
+                if (choice.getId() == ans.getId()) crt_btn = btn;
+                btn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        // switch choice and change background
+                        if (currentClick != -1 && currentClick != id) {
+                            Button btnOld = (Button) findViewById(currentClick);
+                            btnOld.setBackgroundTintList(ContextCompat.getColorStateList(QuestionChoiceActivity.this, R.color.white));
                         }
-                    });
-                }
-            });
+                        currentClick = id;
+                        //set color for choose answer
+                        Button btn = (Button) view;
+                        btn.setBackgroundTintList(ContextCompat.getColorStateList(QuestionChoiceActivity.this, R.color.btn_ans_choice));
+                        if (btn.getText().equals(answer)) {
+                            currentAnswer = 1;
+                        } else {
+                            currentAnswer = 0;
+                        }
+                        Log.i("logQC", currentAnswer + "");
+
+                        // check answer button
+                        Button btnCheck = (Button) findViewById(R.id.button_check);
+                        btnCheck.setClickable(true);
+                        btnCheck.setTextColor(ContextCompat.getColorStateList(QuestionChoiceActivity.this, R.color.white));
+                        btnCheck.setBackgroundTintList(ContextCompat.getColorStateList(QuestionChoiceActivity.this, R.color.correct_text));
+                        btnCheck.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                // lock view after check answer
+                                lockButtons(listButton);
+                                ConstraintLayout footer = (ConstraintLayout) findViewById(R.id.include2);
+                                footer.setVisibility(View.GONE);
+                                Button continueBtn;
+//                            Toast.makeText(QuestionChoiceActivity.this, "click checks", Toast.LENGTH_SHORT).show();
+                                if (currentAnswer == 1) {
+                                    ConstraintLayout cl = (ConstraintLayout) findViewById(R.id.answer_correct);
+                                    cl.setVisibility(View.VISIBLE);
+                                    continueBtn = findViewById(R.id.lesson_btn_continue1);
+                                    curPoint += question.getMark();
+                                } else {
+                                    ConstraintLayout cl = (ConstraintLayout) findViewById(R.id.answer_incorrect);
+                                    cl.setVisibility(View.VISIBLE);
+                                    continueBtn = findViewById(R.id.lesson_btn_continue0);
+                                    crt_btn.setBackgroundTintList(ContextCompat.getColorStateList(QuestionChoiceActivity.this, R.color.correct_ans));
+                                    btn.setBackgroundTintList(ContextCompat.getColorStateList(QuestionChoiceActivity.this, R.color.incorrect_ans));
+                                }
+                                progressBar.setProgress(curProgress + progressPercent);
+                                continueBtn.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        LessonUtil.nextQuestion(quesNo+1, curPoint,
+                                                totalPoint,curProgress + progressPercent,
+                                                QuestionChoiceActivity.this);
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
+            }else{
+                btn.setVisibility(View.GONE);
+            }
             i++;
         }
     }

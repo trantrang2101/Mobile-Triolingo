@@ -1,6 +1,5 @@
 package com.example.triolingo_mobile.Course;
 
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -16,13 +15,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.triolingo_mobile.DAO.StudentCourseDAO;
 import com.example.triolingo_mobile.Model.Course;
-import com.example.triolingo_mobile.Model.StudentCourse;
 import com.example.triolingo_mobile.Model.UserEntity;
 import com.example.triolingo_mobile.R;
 import com.example.triolingo_mobile.Units.ListUnits;
 import com.google.gson.Gson;
-
-import java.util.Random;
 
 public class CourseHolder extends RecyclerView.ViewHolder {
     private CardView card;

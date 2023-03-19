@@ -41,25 +41,24 @@
             android:id="@+id/flow_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="116dp"
+            android:layout_marginBottom="180dp"
             android:orientation="horizontal"
             app:constraint_referenced_ids="lesson_ans_1, lesson_ans_2,
 lesson_ans_3, lesson_ans_4"
             app:flow_horizontalGap="14dp"
             app:flow_horizontalStyle="packed"
             app:flow_verticalGap="14dp"
+
             app:flow_wrapMode="chain"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
-
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/lesson_text_listen" />
+            app:layout_constraintStart_toStartOf="parent" />
 
         <Button
             android:id="@+id/lesson_ans_1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
             android:background="@drawable/custom_btn_ans"
             android:text="Khoai tây"
             android:textColor="@color/black"
@@ -67,13 +66,12 @@ lesson_ans_3, lesson_ans_4"
             app:layout_constraintEnd_toStartOf="@+id/lesson_ans_2"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/lesson_listen_btn" />
+            app:layout_constraintTop_toTopOf="@id/flow_layout" />
 
         <Button
             android:id="@+id/lesson_ans_2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
             android:background="@drawable/custom_btn_ans"
             android:text="Button"
             android:textColor="@color/black"
@@ -81,13 +79,13 @@ lesson_ans_3, lesson_ans_4"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/lesson_ans_1"
-            app:layout_constraintTop_toBottomOf="@+id/lesson_listen_btn" />
+            app:layout_constraintTop_toTopOf="@id/flow_layout" />
 
         <Button
             android:id="@+id/lesson_ans_3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="15dp"
             android:background="@drawable/custom_btn_ans"
             android:text="Button"
             android:textColor="@color/black"
@@ -101,7 +99,7 @@ lesson_ans_3, lesson_ans_4"
             android:id="@+id/lesson_ans_4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="15dp"
             android:background="@drawable/custom_btn_ans"
             android:text="Button"
             android:textColor="@color/black"
