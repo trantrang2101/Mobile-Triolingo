@@ -56,6 +56,17 @@ public class AccountActivity extends AppCompatActivity {
                 startActivity(settingProfile);
             }
         });
+        (findViewById(R.id.btnLogout)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SharedPreferences preferences = getSharedPreferences("my_prefs", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.clear();
+                editor.apply();
+                Intent settingProfile = new  Intent(AccountActivity.this, SettingProfileActivity.class);
+                startActivity(settingProfile);
+            }
+        });
         (findViewById(R.id.btnManageCourses)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
