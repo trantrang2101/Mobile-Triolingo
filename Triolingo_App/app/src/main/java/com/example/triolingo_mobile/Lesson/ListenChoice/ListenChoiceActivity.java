@@ -182,9 +182,7 @@ public class ListenChoiceActivity extends AppCompatActivity {
                                     @Override
                                     public void onClick(View view) {
                                         mediaPlayer.stop();
-                                        LessonUtil.nextQuestion(quesNo+1, curPoint,
-                                                totalPoint,curProgress + progressPercent,
-                                                ListenChoiceActivity.this);
+                                        LessonUtil.nextExercise(quesNo+1,curPoint,totalPoint,curProgress,ListenChoiceActivity.this);
                                     }
                                 });
                             }

@@ -16,6 +16,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.triolingo_mobile.DAO.ExerciseDAO;
+import com.example.triolingo_mobile.Lesson.ListenChoice.ListenChoiceActivity;
 import com.example.triolingo_mobile.Model.AnswerModel;
 import com.example.triolingo_mobile.Model.Exercise;
 import com.example.triolingo_mobile.Model.Question;
@@ -145,9 +146,7 @@ public class QuestionChoiceActivity extends AppCompatActivity {
                                 continueBtn.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
-                                        LessonUtil.nextQuestion(quesNo+1, curPoint,
-                                                totalPoint,curProgress + progressPercent,
-                                                QuestionChoiceActivity.this);
+                                        LessonUtil.nextQuestion(quesNo+1,curPoint,totalPoint,curProgress,progressPercent,QuestionChoiceActivity.this);
                                     }
                                 });
                             }

@@ -64,7 +64,8 @@ public class LessonUtil {
             }else{
                 listQuestion = QuestionDAO.getInstance().getQuestionsByExId(currentEx.getId());
                 if(listQuestion.size()>0){
-                    nextQuestion(0,0, QuestionDAO.getInstance().getMarkByExercise(currentEx.getId()), 0,c);
+                    nextQuestion(0,curPoint, totalPoint,
+                            curProgress, progressPercent , c);
                 }else{
                     nextExercise(exerciseNo+1,curPoint,totalPoint,curProgress,c);
                 }
@@ -73,8 +74,8 @@ public class LessonUtil {
     }
 
     public static void nextQuestion(int questionNo, int curPoint,
-                                    int totalPoint, int curProgress, Context c){
-        int progressPercent = (int)100/listQuestion.size();
+                                    int totalPoint, int curProgress, int progressPercent,  Context c){
+//        int progressPercent = (int)100/listQuestion.size();
         if (questionNo == listQuestion.size()){
             nextExercise(currentExerciseNo+1,curPoint,totalPoint,curProgress,c);
         } else {
