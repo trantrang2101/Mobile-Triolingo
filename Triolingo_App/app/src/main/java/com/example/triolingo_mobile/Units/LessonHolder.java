@@ -36,16 +36,13 @@ public class LessonHolder extends RecyclerView.ViewHolder {
     }
 
     public void onClick(View view) {
-//        Intent intent = new  Intent(itemView.getContext(), LessonUtil.class);
-//        intent.putExtra("id", Integer.parseInt(edit_id.getText().toString()));
-//        itemView.getContext().startActivity(intent);
-
         ExerciseDAO exDao = ExerciseDAO.getInstance();
         String lessonId = edit_id.getText().toString();
         ArrayList<Exercise> listExercise = exDao.getExerciseOfLesson(lessonId);
 
-        LessonUtil.nextExercise(listExercise, 0, 0, 0, 0, itemView.getContext());
-
+        if(listExercise.size()>0){
+            LessonUtil.nextExercise(listExercise, 1, 0, 0, 0, itemView.getContext());
+        }
     }
     private void bindingView(View itemView) {
         edit_id = itemView.findViewById(R.id.lesson_id);

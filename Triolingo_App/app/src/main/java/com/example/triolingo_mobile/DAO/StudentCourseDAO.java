@@ -3,7 +3,9 @@ package com.example.triolingo_mobile.DAO;
 import com.example.triolingo_mobile.DataAccess.DbContext;
 import com.example.triolingo_mobile.Model.StudentCourse;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,6 +40,20 @@ public class StudentCourseDAO extends DbContext {
 
         }
         return list;
+    }
+    public boolean assignStudentToCourse(int studentId,int courseId){
+        boolean check = false;
+        String sql = "Insert into "+DB_TABLE_NAME+" (StudentId,CourseId) Values (?,?)";
+        try {
+            PreparedStatement pre = conn.prepareStatement(sql);
+            pre.setInt(1, studentId);
+            pre.setInt(2, courseId);
+            check = pre.executeUpdate() > 0;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return check;
+
     }
     public StudentCourse getDetail(int id) {
         String sql = "Select * from "+DB_TABLE_NAME+" where id= "+id;
