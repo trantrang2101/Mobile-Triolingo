@@ -55,7 +55,7 @@ public class ListenChoiceActivity extends AppCompatActivity {
         Intent intent = getIntent();
         ExerciseDAO exDao = ExerciseDAO.getInstance();
 
-        ArrayList<Exercise> listExercise = (ArrayList<Exercise>) intent.getSerializableExtra("listExercise");
+//        ArrayList<Exercise> listExercise = (ArrayList<Exercise>) intent.getSerializableExtra("listExercise");
         int quesNo = intent.getIntExtra("quesNo", -1);
         int progressPercent = intent.getIntExtra("progressPercent", -1);
         curPoint += intent.getIntExtra("curPoint", -1);
@@ -65,10 +65,11 @@ public class ListenChoiceActivity extends AppCompatActivity {
 
         progressBar.setProgress(curProgress);
 
-        Exercise exercise = listExercise.get(quesNo);
-        Question question = exDao.getQuesOfExercise(exercise.getId());
+//        Exercise exercise = listExercise.get(quesNo);
+//        Question question = exDao.getQuesOfExercise(exercise.getId());
+        Question question = LessonUtil.getListQuestion().get(quesNo);
         ArrayList<AnswerModel> ansList = exDao.getAnswerOfQuestion(question.getId(),"STATUS>0");
-        String title = exercise.getTitle();
+//        String title = exercise.getTitle();
         String ques = question.getQuestion1();
         totalPoint += question.getMark();
 
@@ -77,7 +78,7 @@ public class ListenChoiceActivity extends AppCompatActivity {
         }
 
         TextView quesView = findViewById(R.id.lesson_text_listen);
-        quesView.setText(title);
+//        quesView.setText(title);
 
         ImageView closeLesson = findViewById(R.id.lesson_close);
         closeLesson.setOnClickListener(new View.OnClickListener() {
@@ -176,7 +177,7 @@ public class ListenChoiceActivity extends AppCompatActivity {
                                 @Override
                                 public void onClick(View view) {
                                     LessonUtil.nextQuestion(quesNo+1, curPoint,
-                                            totalPoint,curProgress + progressPercent,
+                                            totalPoint,curProgress + progressPercent,progressPercent,
                                             ListenChoiceActivity.this);
                                 }
                             });

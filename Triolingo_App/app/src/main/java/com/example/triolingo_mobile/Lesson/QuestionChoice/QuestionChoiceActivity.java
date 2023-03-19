@@ -59,6 +59,7 @@ public class QuestionChoiceActivity extends AppCompatActivity {
         curPoint += intent.getIntExtra("curPoint", -1);
         totalPoint += intent.getIntExtra("totalPoint", -1);
         int curProgress = intent.getIntExtra("curProgress", -1);
+        progressBar.setProgress(curProgress);
 
         Question question = LessonUtil.getListQuestion().get(quesNo);
         ArrayList<AnswerModel> ansList = exDao.getAnswerOfQuestion(question.getId(),"STATUS>0");
@@ -143,7 +144,7 @@ public class QuestionChoiceActivity extends AppCompatActivity {
                                 @Override
                                 public void onClick(View view) {
                                     LessonUtil.nextQuestion(quesNo+1, curPoint,
-                                            totalPoint,curProgress + progressPercent,
+                                            totalPoint,curProgress + progressPercent, progressPercent,
                                             QuestionChoiceActivity.this);
                                 }
                             });
