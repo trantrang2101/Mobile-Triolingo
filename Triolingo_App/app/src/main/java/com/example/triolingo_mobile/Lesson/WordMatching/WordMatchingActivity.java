@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
+import com.example.triolingo_mobile.DAO.LessonDAO;
 import com.example.triolingo_mobile.R;
 
 public class WordMatchingActivity extends AppCompatActivity {
@@ -12,5 +13,9 @@ public class WordMatchingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_word_matching_execise);
+    }
+
+    void GetQuestionData(int lessonId) {
+//        var LessonDAO
     }
 }
