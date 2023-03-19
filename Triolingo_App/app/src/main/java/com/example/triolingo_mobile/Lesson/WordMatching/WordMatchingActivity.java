@@ -51,7 +51,7 @@ public class WordMatchingActivity extends AppCompatActivity {
     void GetQuestionData() {
         Intent intent = getIntent();
         exerciseId = intent.getIntExtra("exerciseId", 11);
-        questions = QuestionDAO.getInstance().getQuestionsByExId(exerciseId);
+        questions = QuestionDAO.getInstance().getQuestionsByExId(exerciseId,"STATUS>0");
         curPoint = 0;
         QuestionColumn = new HashMap<>();
         AnswerColumn = new HashMap<>();

@@ -24,17 +24,13 @@ public class DbContext {
         return rs;
     }
 
-    public int countRows(String table, String search, String addCondition) {
+    public int countRows(String table, String search) {
         int te = 0;
-        String sql = "CALL countRows('\\'%" + search + "%\\'','" + table + "','" + addCondition + "')";
+        String sql = "Select count(*) from "+table+" where "+search;
         ResultSet rs1 = getData(sql);
         try {
             while (rs1.next()) {
-                String sql1 = rs1.getString(1);
-                ResultSet rs = getData(sql1);
-                while (rs.next()) {
-                    te = rs.getInt(1);
-                }
+                te = rs1.getInt(1);
             }
             rs1.close();
         } catch (Exception ex) {
@@ -44,10 +40,10 @@ public class DbContext {
     }
 
     public Connection ConnectionClass() {
-        ip = "192.168.56.1";
+        ip = "192.168.1.28";
         database = "TriolingoDatabase";
-        username = "sa";
-        pass = "123";
+        username = "sa1";
+        pass = "123456";
         port = "1433";
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
