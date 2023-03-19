@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -14,7 +15,10 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.example.triolingo_mobile.DAO.ExerciseDAO;
 import com.example.triolingo_mobile.Model.AnswerModel;
+import com.example.triolingo_mobile.Model.Exercise;
+import com.example.triolingo_mobile.Model.Question;
 import com.example.triolingo_mobile.R;
 import com.example.triolingo_mobile.Util.LessonUtil;
 
@@ -27,12 +31,13 @@ public class QuestionChoiceActivity extends AppCompatActivity {
 
     public int currentAnswer = -1;
     public int currentClick = -1;
-    public int point = 10;
+    int curPoint = 0;
+    int totalPoint = 0;
     public Button crt_btn;
 
-    public String ques = "Choose correct answer";
-    public String description = "The meaning of Potato in VN";
-    public List<AnswerModel> ansList = new ArrayList<>();
+//    public String ques = "Choose correct answer";
+//    public String description = "The meaning of Potato in VN";
+//    public List<AnswerModel> ansList = new ArrayList<>();
 
 
     @Override
@@ -46,34 +51,33 @@ public class QuestionChoiceActivity extends AppCompatActivity {
         ConstraintLayout header = (ConstraintLayout) findViewById(R.id.include);
         ProgressBar progressBar = header.findViewById(R.id.lesson_progressBar);
 
-//        only for clone data
-//    list of ques/excercise for a lesson
-        ArrayList<String> quesList = new ArrayList<>();
-//    current ques/ex
-        int quesNo = -1;
-        quesList.add("7");
-        quesList.add("10");
-        quesList.add("8");
-        ansList.add(new AnswerModel(1, 1, "Khoai", 1, true));
-        ansList.add(new AnswerModel(2, 1, "Gà", 1, false));
-        ansList.add(new AnswerModel(3, 1, "Cá", 1, false));
-        ansList.add(new AnswerModel(4, 1, "Heo", 1, false));
-//        add null answer to fullfil 4 button
+        Intent intent = getIntent();
+        ExerciseDAO exDao = ExerciseDAO.getInstance();
+
+        ArrayList<Exercise> listExercise = (ArrayList<Exercise>) intent.getSerializableExtra("listExercise");
+        int quesNo = intent.getIntExtra("quesNo", -1);
+        int progressPercent = intent.getIntExtra("progressPercent", -1);
+        curPoint += intent.getIntExtra("curPoint", -1);
+        totalPoint += intent.getIntExtra("totalPoint", -1);
+        int curProgress = intent.getIntExtra("curProgress", -1);
+
+        progressBar.setProgress(curProgress);
+        Exercise exercise = listExercise.get(quesNo);
+        Question question = exDao.getQuesOfExercise(exercise.getId());
+        ArrayList<AnswerModel> ansList = exDao.getAnswerOfQuestion(question.getId());
+        String title = exercise.getTitle();
+        String ques = question.getQuestion1();
+        totalPoint += question.getMark();
+
         while (ansList.size()<4){
             ansList.add(new AnswerModel(-1, -1, "", 1, false));
         }
 
         TextView textQues = findViewById(R.id.lesson_text_ques);
-        String displayAns = ques+":\n \""+ description + "\"";
+        String displayAns = title+":\n \""+ ques + "\"";
         textQues.setText(displayAns);
 
-        AnswerModel ans = new AnswerModel();
-        for (AnswerModel a: ansList){
-            if (a.isCorrect()){
-                ans = a;
-                break;
-            }
-        }
+        AnswerModel ans = exDao.getCorrectAnswer(ansList);
         String answer = ans.getAnswer();
         ArrayList<Button> listButton = new ArrayList<>();
 
@@ -130,8 +134,7 @@ public class QuestionChoiceActivity extends AppCompatActivity {
                                 ConstraintLayout cl = (ConstraintLayout) findViewById(R.id.answer_correct);
                                 cl.setVisibility(View.VISIBLE);
                                 continueBtn = findViewById(R.id.lesson_btn_continue1);
-                                int curProgress = progressBar.getProgress();
-                                progressBar.setProgress(curProgress + point);
+                                curPoint += question.getMark();
                             } else {
                                 ConstraintLayout cl = (ConstraintLayout) findViewById(R.id.answer_incorrect);
                                 cl.setVisibility(View.VISIBLE);
@@ -139,10 +142,13 @@ public class QuestionChoiceActivity extends AppCompatActivity {
                                 crt_btn.setBackgroundTintList(ContextCompat.getColorStateList(QuestionChoiceActivity.this, R.color.correct_ans));
                                 btn.setBackgroundTintList(ContextCompat.getColorStateList(QuestionChoiceActivity.this, R.color.incorrect_ans));
                             }
+                            progressBar.setProgress(curProgress + progressPercent);
                             continueBtn.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
-                                    LessonUtil.nextQuestion(quesList,quesNo+1, 0, QuestionChoiceActivity.this);
+                                    LessonUtil.nextExercise(listExercise, quesNo+1, curPoint,
+                                            totalPoint,curProgress + progressPercent,
+                                            QuestionChoiceActivity.this);
                                 }
                             });
                         }

@@ -15,7 +15,10 @@ import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.example.triolingo_mobile.Lesson.QuestionChoice.QuestionChoiceActivity;
+import com.example.triolingo_mobile.DAO.ExerciseDAO;
+import com.example.triolingo_mobile.Lesson.ListenChoice.ListenChoiceActivity;
+import com.example.triolingo_mobile.Model.Exercise;
+import com.example.triolingo_mobile.Model.Question;
 import com.example.triolingo_mobile.R;
 import com.example.triolingo_mobile.Util.LessonUtil;
 
@@ -23,7 +26,8 @@ import java.util.ArrayList;
 
 public class ReadingActivity extends AppCompatActivity {
 
-    public int point = 10;
+    public int curPoint = 0;
+    public int totalPoint = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,20 +41,28 @@ public class ReadingActivity extends AppCompatActivity {
         ProgressBar progressBar = header.findViewById(R.id.lesson_progressBar);
 
         Intent intent = getIntent();
-        ArrayList<String> quesList = intent.getStringArrayListExtra("quesList");
+        ExerciseDAO exDao = ExerciseDAO.getInstance();
+
+        ArrayList<Exercise> listExercise = (ArrayList<Exercise>) intent.getSerializableExtra("listExercise");
         int quesNo = intent.getIntExtra("quesNo", -1);
-        Log.i("next", "ques Reading:"+quesNo);
-        int curProgress = intent.getIntExtra("curPoint", -1) ;
+        int progressPercent = intent.getIntExtra("progressPercent", -1);
+        curPoint += intent.getIntExtra("curPoint", -1);
+        totalPoint += intent.getIntExtra("totalPoint", -1);
+        Log.i("next", "ques No:" + quesNo);
+        int curProgress = intent.getIntExtra("curProgress", -1);
+
         progressBar.setProgress(curProgress);
 
-        String ques = "Reading this paragraph below";
-        String text = "Hắn vừa đi vừa chửi. Bao giờ cũng thế, cứ rượu xong là hắn chửi. Bắt đầu chửi trời, có hề gì?\nTrời có của riêng nhà nào? Rồi hắn chửi đời. Thế cũng chẳng sao: Đời là tất cả nhưng cũng chẳng là ai. Tức mình hắn chửi ngay tất cả làng Vũ Đại. Nhưng cả làng Vũ Đại ai cũng nhủ: “Chắc nó trừ mình ra!”. Không ai lên tiếng cả. Tức thật! Ồ thế này thì tức thật! Tức chết đi được mất! Đã thế, hắn phải chửi cha đứa nào không chửi nhau với hắn. Nhưng cũng không ai ra điều. Mẹ kiếp! Thế thì có phí rượu không? Thế thì có khổ hắn không? Không biết đứa chết mẹ nào đẻ ra thân hắn cho hắn khổ đến nông nỗi này! A ha! Phải đấy hắn cứ thế mà chửi, hắn chửi đứa chết mẹ nào đẻ ra thân hắn, đẻ ra cái thằng Chí Phèo? Mà có trời biết! Hắn không biết, cả làng Vũ Đại cũng không ai biết.";
+        Exercise exercise = listExercise.get(quesNo);
+        Question question = exDao.getQuesOfExercise(exercise.getId());
+        String text = exercise.getTitle();
+        String ques = question.getQuestion1();
+        totalPoint += question.getMark();
 
         TextView textView = (TextView) findViewById(R.id.lesson_reading_text);
-        textView.setText(text);
+        textView.setText(ques);
         TextView quesView = findViewById(R.id.lesson_text_ques);
-        quesView.setText(ques);
-
+        quesView.setText(text);
         ImageView closeLesson = findViewById(R.id.lesson_close);
         closeLesson.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,37 +71,97 @@ public class ReadingActivity extends AppCompatActivity {
             }
         });
 
-        ScrollView scrollView = (ScrollView) findViewById(R.id.scroll_reading);
-        scrollView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
-            boolean first_time = true;
-            @Override
-            public void onScrollChange(View view, int i, int i1, int i2, int i3) {
-                int diff = (textView.getBottom() - (scrollView.getHeight() + scrollView.getScrollY()));
+//        Thread t = new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                long future_time = System.currentTimeMillis() + 5*1000;
+//                long cur_time = System.currentTimeMillis();
+//                while (cur_time < future_time){
+//                    cur_time += 1*1000;
+//                }
+//                runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        ConstraintLayout cl = (ConstraintLayout) findViewById(R.id.answer_correct);
+//                        cl.setVisibility(View.VISIBLE);
+//                        curPoint += question.getMark();
+//                        progressBar.setProgress(curProgress + progressPercent);
+//                        Button continueBtn = findViewById(R.id.lesson_btn_continue1);
+//                        continueBtn.setOnClickListener(new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View view) {
+//                                LessonUtil.nextExercise(listExercise, quesNo+1, curPoint,
+//                                        totalPoint,curProgress + progressPercent,
+//                                        ReadingActivity.this);
+//                            }
+//                        });
+//                    }
+//                });
+//            }
+//        });
+//        t.start();
 
-                if (diff==0 && first_time){
+        ScrollView scrollView = (ScrollView) findViewById(R.id.scroll_reading);
+        if (canScroll(scrollView)) {
+            scrollView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
+                boolean first_time = true;
+
+                @Override
+                public void onScrollChange(View view, int i, int i1, int i2, int i3) {
+                    int diff = (textView.getBottom() - (scrollView.getHeight() + scrollView.getScrollY()));
+
+                    if (diff == 0 && first_time) {
 //                    lockScroll(scrollView);
-                    ConstraintLayout cl = (ConstraintLayout) findViewById(R.id.answer_correct);
-                    cl.setVisibility(View.VISIBLE);
-                    progressBar.setProgress(curProgress + point);
-                    first_time = false;
-                    Button continueBtn = findViewById(R.id.lesson_btn_continue1);
-                    continueBtn.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            LessonUtil.nextQuestion(quesList ,quesNo+1, curProgress + point, ReadingActivity.this);
-                        }
-                    });
+                        ConstraintLayout cl = (ConstraintLayout) findViewById(R.id.answer_correct);
+                        cl.setVisibility(View.VISIBLE);
+                        curPoint += question.getMark();
+                        progressBar.setProgress(curProgress + progressPercent);
+                        first_time = false;
+                        Button continueBtn = findViewById(R.id.lesson_btn_continue1);
+                        continueBtn.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                LessonUtil.nextExercise(listExercise, quesNo + 1, curPoint,
+                                        totalPoint, curProgress + progressPercent,
+                                        ReadingActivity.this);
+                            }
+                        });
+                    }
                 }
-            }
-        });
+            });
+        } else {
+            ConstraintLayout cl = (ConstraintLayout) findViewById(R.id.answer_correct);
+            cl.setVisibility(View.VISIBLE);
+            curPoint += question.getMark();
+            progressBar.setProgress(curProgress + progressPercent);
+            Button continueBtn = findViewById(R.id.lesson_btn_continue1);
+            continueBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    LessonUtil.nextExercise(listExercise, quesNo + 1, curPoint,
+                            totalPoint, curProgress + progressPercent,
+                            ReadingActivity.this);
+                }
+            });
+        }
+
     }
 
-    public void lockScroll(ScrollView scrollView){
+    public void lockScroll(ScrollView scrollView) {
         scrollView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 return true;
             }
         });
+    }
+
+    private boolean canScroll(ScrollView scrollView) {
+        View child = (View) scrollView.getChildAt(0);
+        if (child != null) {
+            int childHeight = (child).getHeight();
+            return scrollView.getHeight() < childHeight + scrollView.getPaddingTop() + scrollView.getPaddingBottom();
+        }
+        return false;
     }
 }

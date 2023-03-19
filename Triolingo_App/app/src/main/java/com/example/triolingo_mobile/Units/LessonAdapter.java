@@ -40,33 +40,6 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonHolder>{
 
         LessonModel a = list.get(position);
         holder.setView(a);
-        // Nếu là holder đầu tiên, đặt vị trí giữa màn hình
-        if (position == 0) {
-            holder.itemView.setX((recyclerView.getResources().getDisplayMetrics().widthPixels - itemWidth) / 2);
-        } else {
-            // Nếu ViewHolder đang hiển thị bên phải ngoài cùng của màn hình
-            if (!leftToRight && holder.itemView.getLeft() >= recyclerView.getWidth() - itemWidth) {
-                // Di chuyển ViewHolder sang bên trái
-                holder.itemView.setTranslationX(-itemWidth);
-                // Đặt ViewHolder ở vị trí kế tiếp bên trái
-//                notifyItemMoved(position, position - 1);
-                // Đặt lại vị trí của ViewHolder
-                holder.itemView.setX(firstItemPosition);
-                // Giảm biến leftToRight
-                leftToRight = true;
-            }
-            // Nếu ViewHolder đang hiển thị bên trái ngoài cùng của màn hình
-            else if (leftToRight && holder.itemView.getRight() <= 0) {
-                // Di chuyển ViewHolder sang bên phải
-                holder.itemView.setTranslationX(itemWidth);
-                // Đặt ViewHolder ở vị trí kế tiếp bên phải
-//                notifyItemMoved(position, position + 1);
-                // Đặt lại vị trí của ViewHolder
-                holder.itemView.setX(firstItemPosition);
-                // Tăng biến leftToRight
-                leftToRight = false;
-            }
-        }
     }
 
     @Override

@@ -44,10 +44,10 @@ public class DbContext {
     }
 
     public Connection ConnectionClass() {
-        ip = "192.168.1.40";
+        ip = "192.168.56.1";
         database = "TriolingoDatabase";
-        username = "sa1";
-        pass = "123456";
+        username = "sa";
+        pass = "123";
         port = "1433";
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);

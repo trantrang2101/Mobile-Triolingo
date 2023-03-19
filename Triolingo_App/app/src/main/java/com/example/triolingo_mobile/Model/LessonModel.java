@@ -8,6 +8,33 @@ public class LessonModel {
     private int status;
     private String note;
 
+    private int totalMark;
+    private int userMark;
+    private boolean isPreviousActived;
+    public boolean isPreviousActived() {
+        return isPreviousActived;
+    }
+
+    public void setPreviousActived(boolean previousActived) {
+        isPreviousActived = previousActived;
+    }
+
+    public int getTotalMark() {
+        return totalMark;
+    }
+
+    public void setTotalMark(int totalMark) {
+        this.totalMark = totalMark;
+    }
+
+    public int getUserMark() {
+        return userMark;
+    }
+
+    public void setUserMark(int userMark) {
+        this.userMark = userMark;
+    }
+
     public LessonModel() {
     }
 

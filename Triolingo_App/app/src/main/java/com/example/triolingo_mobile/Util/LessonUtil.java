@@ -12,40 +12,54 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.Toast;
 
+import com.example.triolingo_mobile.Lesson.LessonFinishActivity;
 import com.example.triolingo_mobile.Lesson.ListenChoice.ListenChoiceActivity;
 import com.example.triolingo_mobile.Lesson.QuestionChoice.QuestionChoiceActivity;
 import com.example.triolingo_mobile.Lesson.Reading.ReadingActivity;
+import com.example.triolingo_mobile.Model.Exercise;
 import com.example.triolingo_mobile.R;
 
 import java.util.ArrayList;
 
 public class LessonUtil {
 
-    public static void nextQuestion(ArrayList<String> quesList, int quesNo, int curPoint, Context c){
-        if (quesNo == quesList.size()){
-            quesNo = 0;
-        }
-        String nextQuesType = quesList.get(quesNo);
-        Log.i("next", "next:" + nextQuesType);
+    public static void nextExercise(ArrayList<Exercise> listExercise, int quesNo, int curPoint,
+                                    int totalPoint, int curProgress, Context c){
         Intent intent;
-        switch (Integer.parseInt(nextQuesType)){
-            case 7:
-                intent = new Intent(c, ReadingActivity.class);
-                break;
-            case 8:
-                intent = new Intent(c, QuestionChoiceActivity.class);
-                break;
-            case 10:
-                intent = new Intent(c, ListenChoiceActivity.class);
-                break;
-            default:
-                intent = new Intent();
-                break;
+        int progressPercent = (int)100/listExercise.size();
+        if (quesNo == listExercise.size()){
+            intent = new Intent(c, LessonFinishActivity.class);
+
+            intent.putExtra("curPoint", curPoint);
+            intent.putExtra("totalPoint", totalPoint);
+            intent.putExtra("progressPercent", progressPercent);
+            intent.putExtra("curProgress", curProgress);
+        } else {
+            Exercise nextExercise = listExercise.get(quesNo);
+            int type = nextExercise.getTypeId();
+            Log.i("next", "next type:" + type);
+            switch (type){
+                case 7:
+                    intent = new Intent(c, ReadingActivity.class);
+                    break;
+                case 8:
+                    intent = new Intent(c, QuestionChoiceActivity.class);
+                    break;
+                case 10:
+                    intent = new Intent(c, ListenChoiceActivity.class);
+                    break;
+                default:
+                    intent = new Intent();
+                    break;
+            }
+            intent.putExtra("listExercise", listExercise);
+            intent.putExtra("progressPercent", progressPercent);
+            Log.i("next", "quesL:"+listExercise.size());
+            intent.putExtra("quesNo", quesNo);
+            intent.putExtra("curPoint", curPoint);
+            intent.putExtra("totalPoint", totalPoint);
+            intent.putExtra("curProgress", curProgress);
         }
-        intent.putStringArrayListExtra("quesList", quesList);
-        Log.i("next", "quesL:"+quesList.size());
-        intent.putExtra("quesNo", quesNo);
-        intent.putExtra("curPoint", curPoint);
         c.startActivity(intent);
     }
 
