@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 
 import com.example.triolingo_mobile.DAO.ExerciseDAO;
 import com.example.triolingo_mobile.DAO.LessonDAO;
@@ -25,6 +26,7 @@ public class WordMatchingActivity extends AppCompatActivity {
     private HashMap<String, Integer> AnswerColumn;
     private RecyclerView questionColumn;
     private RecyclerView answerColumn;
+    private Button continueBtn;
     private int curPoint;
     private String selectedQuestion;
     private String selectedAnswer;
@@ -32,20 +34,23 @@ public class WordMatchingActivity extends AppCompatActivity {
     private WordListAdapter answerAdapter;
     private List<Question> questions;
 
+    private int exerciseId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_word_matching_execise);
         questionColumn = findViewById(R.id.question_recyclerview);
         answerColumn = findViewById(R.id.answer_recyclerview);
+        continueBtn = findViewById(R.id.word_match_continue);
 
         GetQuestionData();
     }
 
     void GetQuestionData() {
         Intent intent = getIntent();
-        int exerciseID = intent.getIntExtra("exerciseId", 11);
-        questions = QuestionDAO.getInstance().getQuestionsByExId(exerciseID);
+        exerciseId = intent.getIntExtra("exerciseId", 11);
+        questions = QuestionDAO.getInstance().getQuestionsByExId(exerciseId);
         curPoint = 0;
         QuestionColumn = new HashMap<>();
         AnswerColumn = new HashMap<>();
@@ -64,6 +69,11 @@ public class WordMatchingActivity extends AppCompatActivity {
         answerAdapter = new WordListAdapter(AnswerColumn, this::OnAnswerClick);
         answerColumn.setAdapter(answerAdapter);
         answerColumn.setLayoutManager(new LinearLayoutManager(this));
+        continueBtn.setOnClickListener(this::OnClickContinue);
+
+        if (!IsFinished()) {
+            continueBtn.setEnabled(false);
+        }
     }
 
     int OnAnswerClick(WordItemHolder holder) {
@@ -109,7 +119,7 @@ public class WordMatchingActivity extends AppCompatActivity {
             }
             questionAdapter.MarkAllIncorrect();
             answerAdapter.MarkAllIncorrect();
-            Log.i("QnA", "FINISHED: " + curPoint);
+            continueBtn.setEnabled(true);
         }
     }
 
@@ -148,5 +158,15 @@ public class WordMatchingActivity extends AppCompatActivity {
     void DeselectAll() {
         selectedQuestion = null;
         selectedAnswer = null;
+    }
+
+    void OnClickContinue(View v) {
+        Intent intent = getIntent();
+        LessonUtil.nextExercise(
+                exerciseId + 1,
+                intent.getIntExtra("curPoint", 0) + curPoint,
+                intent.getIntExtra("totalPoint", 0),
+                intent.getIntExtra("progressPercent", 0),
+                WordMatchingActivity.this);
     }
 }
