@@ -6,8 +6,9 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.speech.tts.TextToSpeech;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -17,14 +18,16 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.triolingo_mobile.DAO.ExerciseDAO;
-import com.example.triolingo_mobile.Lesson.QuestionChoice.QuestionChoiceActivity;
 import com.example.triolingo_mobile.Model.AnswerModel;
 import com.example.triolingo_mobile.Model.Exercise;
 import com.example.triolingo_mobile.Model.Question;
 import com.example.triolingo_mobile.R;
 import com.example.triolingo_mobile.Util.LessonUtil;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
@@ -34,7 +37,6 @@ public class ListenChoiceActivity extends AppCompatActivity {
     public int currentClick = -1;
     int curPoint = 0;
     int totalPoint = 0;
-    TextToSpeech textToSpeech;
     public Button crt_btn;
 
 //    public String ques = "Listen and choose correct answer";
@@ -55,29 +57,26 @@ public class ListenChoiceActivity extends AppCompatActivity {
         Intent intent = getIntent();
         ExerciseDAO exDao = ExerciseDAO.getInstance();
 
-        ArrayList<Exercise> listExercise = (ArrayList<Exercise>) intent.getSerializableExtra("listExercise");
         int quesNo = intent.getIntExtra("quesNo", -1);
         int progressPercent = intent.getIntExtra("progressPercent", -1);
         curPoint += intent.getIntExtra("curPoint", -1);
         totalPoint += intent.getIntExtra("totalPoint", -1);
-        Log.i("next", "ques No:"+quesNo);
         int curProgress = intent.getIntExtra("curProgress", -1);
 
-        progressBar.setProgress(curProgress);
-
-        Exercise exercise = listExercise.get(quesNo);
-        Question question = exDao.getQuesOfExercise(exercise.getId());
+        Question question = LessonUtil.getListQuestion().get(quesNo);
         ArrayList<AnswerModel> ansList = exDao.getAnswerOfQuestion(question.getId(),"STATUS>0");
-        String title = exercise.getTitle();
+        Collections.shuffle(ansList);
         String ques = question.getQuestion1();
         totalPoint += question.getMark();
+        Exercise ex = question.getExercise();
 
+        progressBar.setProgress(curProgress);
         while (ansList.size()<4){
             ansList.add(new AnswerModel(-1, -1, "", 1, false));
         }
 
         TextView quesView = findViewById(R.id.lesson_text_listen);
-        quesView.setText(title);
+        quesView.setText(ques);
 
         ImageView closeLesson = findViewById(R.id.lesson_close);
         closeLesson.setOnClickListener(new View.OnClickListener() {
@@ -86,24 +85,31 @@ public class ListenChoiceActivity extends AppCompatActivity {
                 LessonUtil.closeLesson(ListenChoiceActivity.this, main);
             }
         });
-
-        textToSpeech = new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
-            @Override
-            public void onInit(int i) {
-                // if No error is found then only it will run
-                if(i!=TextToSpeech.ERROR){
-                    // To Choose language of speech
-                    textToSpeech.setLanguage(Locale.US);
-                }
-            }
-        });
+        byte[] audioData = Base64.decode(ex.getFile(), Base64.DEFAULT);
+        FileOutputStream outputStream;
+        try {
+            outputStream = new FileOutputStream(new File(getExternalFilesDir(null), ex.getFileName()));
+            outputStream.write(audioData);
+            outputStream.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        MediaPlayer mediaPlayer = new MediaPlayer();
+        try {
+            mediaPlayer.setDataSource(new File(getExternalFilesDir(null), ex.getFileName()).getAbsolutePath());
+            mediaPlayer.prepare();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         Button buttonListen = findViewById(R.id.lesson_listen_btn);
         buttonListen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Locale current = getResources().getConfiguration().getLocales().get(0);
-                Log.i("speech", "click +" + current.toString());
-                textToSpeech.speak(ques, TextToSpeech.QUEUE_FLUSH,null);
+                if(mediaPlayer.isPlaying()){
+                    mediaPlayer.pause();
+                }else{
+                    mediaPlayer.start();
+                }
             }
         });
 
@@ -115,75 +121,77 @@ public class ListenChoiceActivity extends AppCompatActivity {
             }
         }
         String answer = ans.getAnswer();
-        int i = 1;
         ArrayList<Button> listButton = new ArrayList<>();
 
+        int i = 1;
         for (AnswerModel choice : ansList) {
             String idName = "lesson_ans_" + i;
             int id = getResources().getIdentifier(idName, "id", getPackageName());
             Button btn = (Button) findViewById(id);
-            listButton.add(btn);
-            btn.setText(choice.getAnswer());
-            if (choice.getId() == ans.getId()) crt_btn = btn;
-            btn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    // switch choice and change background
-                    if (currentClick != -1 && currentClick != id) {
-                        Button btnOld = (Button) findViewById(currentClick);
-                        btnOld.setBackgroundTintList(ContextCompat.getColorStateList(ListenChoiceActivity.this, R.color.white));
-                    }
-                    currentClick = id;
-                    //set color for choose answer
-                    Button btn = (Button) view;
-                    btn.setBackgroundTintList(ContextCompat.getColorStateList(ListenChoiceActivity.this, R.color.btn_ans_choice));
-                    if (btn.getText().equals(answer)) {
-                        currentAnswer = 1;
-                    } else {
-                        currentAnswer = 0;
-                    }
-                    Log.i("logQC", currentAnswer + "");
-
-                    // check answer button
-                    Button btnCheck = (Button) findViewById(R.id.button_check);
-                    btnCheck.setClickable(true);
-                    btnCheck.setTextColor(ContextCompat.getColorStateList(ListenChoiceActivity.this,R.color.white));
-                    btnCheck.setBackgroundTintList(ContextCompat.getColorStateList(ListenChoiceActivity.this,R.color.correct_text));
-                    btnCheck.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            // lock view after check answer
-                            listButton.add(buttonListen);
-                            lockButtons(listButton);
-                            ConstraintLayout footer = (ConstraintLayout) findViewById(R.id.include2);
-                            footer.setVisibility(View.GONE);
-                            Button continueBtn;
-//                            Toast.makeText(QuestionChoiceActivity.this, "click checks", Toast.LENGTH_SHORT).show();
-                            if (currentAnswer == 1) {
-                                ConstraintLayout cl = (ConstraintLayout) findViewById(R.id.answer_correct);
-                                cl.setVisibility(View.VISIBLE);
-                                continueBtn = findViewById(R.id.lesson_btn_continue1);
-                                curPoint += question.getMark();
-                            } else {
-                                ConstraintLayout cl = (ConstraintLayout) findViewById(R.id.answer_incorrect);
-                                cl.setVisibility(View.VISIBLE);
-                                continueBtn = findViewById(R.id.lesson_btn_continue0);
-                                crt_btn.setBackgroundTintList(ContextCompat.getColorStateList(ListenChoiceActivity.this,R.color.correct_ans));
-                                btn.setBackgroundTintList(ContextCompat.getColorStateList(ListenChoiceActivity.this,R.color.incorrect_ans));
-                            }
-                            progressBar.setProgress(curProgress + progressPercent);
-                            continueBtn.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    LessonUtil.nextQuestion(quesNo+1, curPoint,
-                                            totalPoint,curProgress + progressPercent,
-                                            ListenChoiceActivity.this);
-                                }
-                            });
+            if(choice.getId()>0){
+                listButton.add(btn);
+                btn.setText(choice.getAnswer());
+                if (choice.getId() == ans.getId()) crt_btn = btn;
+                btn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        // switch choice and change background
+                        if (currentClick != -1 && currentClick != id) {
+                            Button btnOld = (Button) findViewById(currentClick);
+                            btnOld.setBackgroundTintList(ContextCompat.getColorStateList(ListenChoiceActivity.this, R.color.white));
                         }
-                    });
-                }
-            });
+                        currentClick = id;
+                        //set color for choose answer
+                        Button btn = (Button) view;
+                        btn.setBackgroundTintList(ContextCompat.getColorStateList(ListenChoiceActivity.this, R.color.btn_ans_choice));
+                        if (btn.getText().equals(answer)) {
+                            currentAnswer = 1;
+                        } else {
+                            currentAnswer = 0;
+                        }
+                        Log.i("logQC", currentAnswer + "");
+
+                        // check answer button
+                        Button btnCheck = (Button) findViewById(R.id.button_check);
+                        btnCheck.setClickable(true);
+                        btnCheck.setTextColor(ContextCompat.getColorStateList(ListenChoiceActivity.this, R.color.white));
+                        btnCheck.setBackgroundTintList(ContextCompat.getColorStateList(ListenChoiceActivity.this, R.color.correct_text));
+                        btnCheck.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                // lock view after check answer
+                                lockButtons(listButton);
+                                ConstraintLayout footer = (ConstraintLayout) findViewById(R.id.include2);
+                                footer.setVisibility(View.GONE);
+                                Button continueBtn;
+//                            Toast.makeText(ListenChoiceActivity.this, "click checks", Toast.LENGTH_SHORT).show();
+                                if (currentAnswer == 1) {
+                                    ConstraintLayout cl = (ConstraintLayout) findViewById(R.id.answer_correct);
+                                    cl.setVisibility(View.VISIBLE);
+                                    continueBtn = findViewById(R.id.lesson_btn_continue1);
+                                    curPoint += question.getMark();
+                                } else {
+                                    ConstraintLayout cl = (ConstraintLayout) findViewById(R.id.answer_incorrect);
+                                    cl.setVisibility(View.VISIBLE);
+                                    continueBtn = findViewById(R.id.lesson_btn_continue0);
+                                    crt_btn.setBackgroundTintList(ContextCompat.getColorStateList(ListenChoiceActivity.this, R.color.correct_ans));
+                                    btn.setBackgroundTintList(ContextCompat.getColorStateList(ListenChoiceActivity.this, R.color.incorrect_ans));
+                                }
+                                progressBar.setProgress(curProgress + progressPercent);
+                                continueBtn.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        mediaPlayer.stop();
+                                        LessonUtil.nextExercise(quesNo+1,curPoint,totalPoint,curProgress,ListenChoiceActivity.this);
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
+            }else{
+                btn.setVisibility(View.GONE);
+            }
             i++;
         }
     }
@@ -193,4 +201,6 @@ public class ListenChoiceActivity extends AppCompatActivity {
             btn.setClickable(false);
         }
     }
+
+
 }

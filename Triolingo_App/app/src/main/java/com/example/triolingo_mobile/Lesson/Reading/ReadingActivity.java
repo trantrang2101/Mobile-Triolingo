@@ -43,7 +43,7 @@ public class ReadingActivity extends AppCompatActivity {
         Intent intent = getIntent();
         ExerciseDAO exDao = ExerciseDAO.getInstance();
 
-        ArrayList<Exercise> listExercise = (ArrayList<Exercise>) intent.getSerializableExtra("listExercise");
+//        ArrayList<Exercise> listExercise = (ArrayList<Exercise>) intent.getSerializableExtra("listExercise");
         int quesNo = intent.getIntExtra("quesNo", -1);
         int progressPercent = intent.getIntExtra("progressPercent", -1);
         curPoint += intent.getIntExtra("curPoint", -1);
@@ -53,16 +53,17 @@ public class ReadingActivity extends AppCompatActivity {
 
         progressBar.setProgress(curProgress);
 
-        Exercise exercise = listExercise.get(quesNo);
-        Question question = exDao.getQuesOfExercise(exercise.getId());
-        String text = exercise.getTitle();
+//        Exercise exercise = listExercise.get(quesNo);
+//        Question question = exDao.getQuesOfExercise(exercise.getId());
+        Question question = LessonUtil.getListQuestion().get(quesNo);
+//        String text = exercise.getTitle();
         String ques = question.getQuestion1();
         totalPoint += question.getMark();
 
         TextView textView = (TextView) findViewById(R.id.lesson_reading_text);
         textView.setText(ques);
         TextView quesView = findViewById(R.id.lesson_text_ques);
-        quesView.setText(text);
+//        quesView.setText(text);
         ImageView closeLesson = findViewById(R.id.lesson_close);
         closeLesson.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -121,8 +122,8 @@ public class ReadingActivity extends AppCompatActivity {
                         continueBtn.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                LessonUtil.nextExercise(quesNo + 1, curPoint,
-                                        totalPoint, curProgress + progressPercent,
+                                LessonUtil.nextQuestion(quesNo + 1, curPoint,
+                                        totalPoint, curProgress + progressPercent,progressPercent,
                                         ReadingActivity.this);
                             }
                         });
@@ -138,8 +139,8 @@ public class ReadingActivity extends AppCompatActivity {
             continueBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    LessonUtil.nextExercise( quesNo + 1, curPoint,
-                            totalPoint, curProgress + progressPercent,
+                    LessonUtil.nextQuestion( quesNo + 1, curPoint,
+                            totalPoint, curProgress + progressPercent,progressPercent,
                             ReadingActivity.this);
                 }
             });

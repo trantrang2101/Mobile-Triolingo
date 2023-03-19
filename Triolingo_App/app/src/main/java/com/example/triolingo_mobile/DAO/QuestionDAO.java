@@ -34,6 +34,7 @@ public class QuestionDAO extends DbContext {
                 e.setId(rs.getInt("Id"));
                 e.setStatus(rs.getInt("Status"));
                 e.setQuestion1(rs.getString("Question1"));
+                e.setExerciseId(rs.getInt("ExerciseId"));
                 e.setMark(rs.getInt("Mark"));
                 list.add(e);
             }
