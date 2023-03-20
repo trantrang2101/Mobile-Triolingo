@@ -113,7 +113,7 @@ public class RegisterActivity extends AppCompatActivity {
                     try {
                         saveBase64Str(MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri));
                     } catch (Exception e) {
-                        Toast.makeText(this, "Ảnh không tồn tại hoặc không đọc được!!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, getString(R.string.upload_image_fail_message), Toast.LENGTH_SHORT).show();
                         avatarUrl = null;
                         avatarView.setImageResource(R.mipmap.ic_launcher_round);
                     }
@@ -124,27 +124,27 @@ public class RegisterActivity extends AppCompatActivity {
 
     boolean checkRegisterInfo() {
         if (email_txt.getText().toString().trim().isEmpty()) {
-            email_txt.setError("Email không được để trống");
+            email_txt.setError(getString(R.string.email_is_empty));
             return false;
         }
         if(!UserDAO.getInstance().IsValidEmail(email_txt.getText().toString())){
-            email_txt.setError("Email không hợp lệ");
+            email_txt.setError(getString(R.string.email_invalid));
             return false;
         }
         if(!UserDAO.getInstance().IsExistEmail(email_txt.getText().toString())){
-            email_txt.setError("Email đã được đăng ký rồi");
+            email_txt.setError(getString(R.string.email_exist));
             return false;
         }
         if (name_txt.getText().toString().trim().isEmpty()) {
-            name_txt.setError("Họ tên không được để trống");
+            name_txt.setError(getString(R.string.name_is_empty));
             return false;
         }
         if (password_txt.getText().toString().trim().isEmpty()) {
-            password_txt.setError("Mật khẩu không được để trống");
+            password_txt.setError(getString(R.string.password_is_empty));
             return false;
         }
         if (confirm_pw_txt.getText().toString().compareTo(password_txt.getText().toString()) != 0) {
-            confirm_pw_txt.setError("Mật khẩu nhập lại không khớp!");
+            confirm_pw_txt.setError(getString(R.string.repass_not_match));
             return false;
         }
         return true;
