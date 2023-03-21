@@ -29,7 +29,7 @@ public class UnitAdapter extends RecyclerView.Adapter<UnitHolder>{
     @Override
     public void onBindViewHolder(@NonNull UnitHolder holder, int position) {
         UnitModel a = list.get(position);
-        holder.setView(a);
+        holder.setView(a,position==0);
     }
 
     @Override

@@ -39,6 +39,8 @@ public class UnitHolder extends RecyclerView.ViewHolder {
     private Context context;
     private UnitModel unit;
 
+    private boolean isFirst;
+
     public UnitHolder(@NonNull View itemView, Context context) {
         super(itemView);
         bindingView(itemView);
@@ -61,7 +63,7 @@ public class UnitHolder extends RecyclerView.ViewHolder {
         card_view=itemView.findViewById(R.id.unit_card_view);
     }
 
-    public void setView(UnitModel unit) {
+    public void setView(UnitModel unit,boolean isFirst) {
         this.unit=unit;
         edit_id.setText(unit.getId()+"");
         edit_desc.setText(unit.getDescription());
@@ -83,7 +85,11 @@ public class UnitHolder extends RecyclerView.ViewHolder {
         StudentCourse studentCourse = listStudentCourse.get(0);
         List<StudentLesson> list = StudentLessonDAO.getInstance().getList("LessionId in (select id from [Lesson] Where [UnitId]="+unit.getId()+") AND StudentCourseId ="+studentCourse.getId());
         List<LessonModel> listResult = LessonDAO.getInstance().getList("Status>0 AND UnitId="+unit.getId());
-        listResult.get(0).setPreviousActived(list.size()>0);
+        if(isFirst){
+            listResult.get(0).setPreviousActived(true);
+        }else{
+            listResult.get(0).setPreviousActived(list.size()>0);
+        }
         for (int i = 0; i< listResult.size();i++) {
             int index= list.stream().map(StudentLesson::getLessonId).collect(Collectors.toList()).indexOf(listResult.get(i).getId());
             listResult.get(i).setUserMark(index!=-1?list.get(index).getMark():listResult.get(i).isPreviousActived()?-100:-1);
