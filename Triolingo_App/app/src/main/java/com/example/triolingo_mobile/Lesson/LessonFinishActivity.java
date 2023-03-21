@@ -33,11 +33,13 @@ public class LessonFinishActivity extends AppCompatActivity {
         boolean check = false;
         StudentLesson studentLesson =StudentLessonDAO.getInstance().getDetail(courseStudentId,lessonId);
         if(studentLesson==null){
-            studentLesson.setMark(curPoint);
+            studentLesson = new StudentLesson(curPoint,lessonId,courseStudentId);
             check=StudentLessonDAO.getInstance().createStudentLesson(studentLesson);
         }else{
-            if(curPoint>studentLesson.getMark())
+            if(curPoint>studentLesson.getMark()){
+                studentLesson.setMark(curPoint);
                 check=StudentLessonDAO.getInstance().updateStudentLesson(studentLesson);
+            }
         }
         Button btn = findViewById(R.id.continueBtn);
         btn.setOnClickListener(new View.OnClickListener() {

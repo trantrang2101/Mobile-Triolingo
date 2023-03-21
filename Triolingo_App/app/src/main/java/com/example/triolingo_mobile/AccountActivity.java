@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.example.triolingo_mobile.Course.ListCoursesActivity;
 import com.example.triolingo_mobile.DAO.StudentCourseDAO;
+import com.example.triolingo_mobile.DAO.StudentLessonDAO;
 import com.example.triolingo_mobile.DAO.UserDAO;
 import com.example.triolingo_mobile.Model.StudentCourse;
 import com.example.triolingo_mobile.Model.UserEntity;
@@ -46,6 +47,7 @@ public class AccountActivity extends AppCompatActivity {
         username.setText(us.getFullNamel());
         int totalCourse = StudentCourseDAO.getInstance().countRows(StudentCourseDAO.DB_TABLE_NAME,"StudentId="+us.getId());
         ((TextView)findViewById(R.id.totalCourse)).setText(totalCourse+"");
+        ((TextView)findViewById(R.id.totalMark)).setText(StudentLessonDAO.getInstance().getMarkByUser(us.getId()) +"");
         Bitmap b = convertBase64ToBitMap();
         ((CircleImageView)findViewById(R.id.image_profile)).setImageBitmap(b);
 
@@ -63,7 +65,7 @@ public class AccountActivity extends AppCompatActivity {
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.clear();
                 editor.apply();
-                Intent settingProfile = new  Intent(AccountActivity.this, SettingProfileActivity.class);
+                Intent settingProfile = new  Intent(AccountActivity.this, LoginActivity.class);
                 startActivity(settingProfile);
             }
         });

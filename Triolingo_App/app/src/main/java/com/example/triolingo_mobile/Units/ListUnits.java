@@ -19,7 +19,6 @@ import com.example.triolingo_mobile.Model.Course;
 import com.example.triolingo_mobile.Model.UnitModel;
 import com.example.triolingo_mobile.R;
 
-import java.sql.Connection;
 import java.util.List;
 
 public class ListUnits extends AppCompatActivity {
@@ -33,7 +32,7 @@ public class ListUnits extends AppCompatActivity {
         int id = intent.getIntExtra("id",0);
         Course cour = CourseDAO.getInstance().getDetail(id);
         ((TextView)findViewById(R.id.course_name)).setText(cour.getName());
-        Button btn = findViewById(R.id.course_desc);
+        Button btn = findViewById(R.id.btn_backToAccount);
         ((ImageView)findViewById(R.id.course_return)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -8,6 +8,7 @@
     <string name="btn_check">KIỂM TRA</string>
     <string name="btn_quit">THOÁT</string>
     <string name="btn_cancel">HỦY</string>
+    <string name="btn_desc">MÔ TẢ</string>
     <string name="lesson_close_text"><b>Bạn có chắc muốn thoát không?</b>\nToàn bộ tiến trình của bài học này sẽ bị mất.</string>
     <string name="update_profile_user_sucess">Cập nhật thành công!</string>
     <string name="update_profile_user_fail">Cập nhật thất bại!</string>

@@ -89,6 +89,21 @@ public class StudentLessonDAO extends DbContext {
         return null;
     }
 
+    public int getMarkByUser(int userId){
+        Integer sum= 0;
+        String sql ="select sum(Mark) as Mark from "+DB_TABLE_NAME+" where StudentCourseId in (select id from StudentCourse where StudentId="+userId+")";
+        ResultSet rs = getData(sql);
+        try {
+            while (rs.next()) {
+                sum = rs.getInt("Mark");
+                System.out.println(sum);
+            }
+            rs.close();
+        } catch (Exception ex) {
+        }
+        return sum;
+    }
+
     public StudentLesson getDetail(int id) {
         String sql = "Select * from "+DB_TABLE_NAME+" where id= "+id;
         ResultSet rs = getData(sql);

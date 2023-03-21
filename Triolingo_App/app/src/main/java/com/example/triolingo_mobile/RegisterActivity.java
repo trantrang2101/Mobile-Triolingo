@@ -43,6 +43,14 @@ public class RegisterActivity extends AppCompatActivity {
         uploadImgBtn = findViewById(R.id.uploadImageButton);
         avatarView = findViewById(R.id.avatarView);
 
+        (findViewById(R.id.backBtn)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+                startActivity(intent);
+            }
+        });
+
         registerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

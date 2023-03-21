@@ -59,7 +59,7 @@ public class UserDAO extends DbContext {
         int n = 0;
         try {
             PreparedStatement pre = conn.prepareStatement(sql);
-            pre.setString(1, us.getFullNamel());
+            pre.setNString(1, us.getFullNamel());
             pre.setString(2, us.getEmail());
             pre.setString(3, us.getAvatarUrl());
             pre.setString(4, us.getPassword());

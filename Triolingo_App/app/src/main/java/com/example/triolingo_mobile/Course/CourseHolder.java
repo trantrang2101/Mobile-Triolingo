@@ -91,7 +91,7 @@ public class CourseHolder extends RecyclerView.ViewHolder {
             edit_name = itemView.findViewById(R.id.course_name);
             edit_rate = itemView.findViewById(R.id.course_rate);
             card = itemView.findViewById(R.id.unit_card_view);
-            btn = itemView.findViewById(R.id.course_desc);
+            btn = itemView.findViewById(R.id.btn_backToAccount);
             card.setVisibility(View.VISIBLE);
             itemView.findViewById(R.id.unit_card_view_not).setVisibility(View.GONE);
         }else{

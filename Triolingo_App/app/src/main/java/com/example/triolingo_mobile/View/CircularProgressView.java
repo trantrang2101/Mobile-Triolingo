@@ -80,6 +80,8 @@ public class CircularProgressView extends View {
 
         if(mProgress>0){
             mInnerPaint.setColor(getContext().getResources().getColor(R.color.correct_background));
+        }else if(mProgress==-100){
+            mInnerPaint.setColor(getContext().getResources().getColor(R.color.purple_200));
         }else{
             mInnerPaint.setColor(getContext().getResources().getColor(R.color.grey));
         }

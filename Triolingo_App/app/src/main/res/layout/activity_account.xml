@@ -194,7 +194,8 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:background="@drawable/custom_btn_continue"
-                android:text="Xóa tài khoản" />
+                android:text="Xóa tài khoản"
+                android:visibility="gone" />
 
         </LinearLayout>
 

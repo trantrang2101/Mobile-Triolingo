@@ -10,11 +10,16 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import com.example.triolingo_mobile.DAO.ExerciseDAO;
 import com.example.triolingo_mobile.DAO.LessonDAO;
 import com.example.triolingo_mobile.DAO.QuestionDAO;
+import com.example.triolingo_mobile.Lesson.ListenChoice.ListenChoiceActivity;
+import com.example.triolingo_mobile.Lesson.QuestionChoice.QuestionChoiceActivity;
+import com.example.triolingo_mobile.Lesson.Reading.ReadingActivity;
 import com.example.triolingo_mobile.Model.AnswerModel;
 import com.example.triolingo_mobile.Model.Question;
 import com.example.triolingo_mobile.R;
@@ -47,7 +52,18 @@ public class WordMatchingActivity extends AppCompatActivity {
         questionColumn = findViewById(R.id.question_recyclerview);
         answerColumn = findViewById(R.id.answer_recyclerview);
         continueBtn = findViewById(R.id.word_match_continue);
-        progressBar = findViewById(R.id.include4).findViewById(R.id.lesson_progressBar);
+        progressBar = findViewById(R.id.include).findViewById(R.id.lesson_progressBar);
+
+        FrameLayout main = findViewById(R.id.main_layout);
+        main.getForeground().setAlpha(0);
+
+        ImageView closeLesson = findViewById(R.id.lesson_close);
+        closeLesson.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                LessonUtil.closeLesson(WordMatchingActivity.this, findViewById(R.id.main_layout));
+            }
+        });
 
         GetQuestionData();
     }

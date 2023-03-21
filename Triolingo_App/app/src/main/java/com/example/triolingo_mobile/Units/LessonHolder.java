@@ -50,9 +50,9 @@ public class LessonHolder extends RecyclerView.ViewHolder {
         edit_id = itemView.findViewById(R.id.lesson_id);
         edit_name = itemView.findViewById(R.id.lesson_name);
         card = itemView.findViewById(R.id.lesson_btn);
-        card.setProgress(lesson.getUserMark()!=-1?
+        card.setProgress(lesson.isPreviousActived()&&lesson.getUserMark()>=0?
                 (lesson.getUserMark()==lesson.getTotalMark()?100:(((float)lesson.getUserMark()/lesson.getTotalMark())*100))
-                :0);
+                :lesson.getUserMark());
     }
 
     public void setView(LessonModel lesson) {

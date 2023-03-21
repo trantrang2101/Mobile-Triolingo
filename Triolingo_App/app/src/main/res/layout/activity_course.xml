@@ -52,10 +52,10 @@
             android:id="@+id/course_desc_not"
             android:layout_width="122dp"
             android:layout_height="45dp"
-            android:layout_marginLeft="250dp"
+            android:layout_marginLeft="210dp"
             android:layout_marginTop="15dp"
             android:backgroundTint="@color/grey"
-            android:text="GUIDEBOOK"
+            android:text="@string/btn_desc"
             android:textColor="@color/black"
             android:textSize="12sp"
             app:cornerRadius="@dimen/border_radius" />
@@ -104,13 +104,13 @@
             android:textStyle="bold" />
 
         <Button
-            android:id="@+id/course_desc"
+            android:id="@+id/btn_backToAccount"
             android:layout_width="122dp"
             android:layout_height="45dp"
             android:layout_marginLeft="250dp"
             android:layout_marginTop="15dp"
             android:backgroundTint="#4CAF50"
-            android:text="GUIDEBOOK"
+            android:text="@string/btn_desc"
             android:textSize="12sp"
             app:cornerRadius="@dimen/border_radius" />
     </androidx.cardview.widget.CardView>

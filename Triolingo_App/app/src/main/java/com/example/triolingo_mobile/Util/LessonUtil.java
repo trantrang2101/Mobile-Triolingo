@@ -114,7 +114,7 @@ public class LessonUtil {
     }
 
     // when click close icon or click go back in control
-    public static void closeLesson(Context c, FrameLayout main){
+    public static void closeLesson(Context c, View main){
         View view = View.inflate(c, R.layout.lesson_close, null);
 
         int width = LinearLayout.LayoutParams.WRAP_CONTENT;

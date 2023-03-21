@@ -43,13 +43,13 @@
             android:src="@drawable/ic_close_2" />
 
         <Button
-            android:id="@+id/course_desc"
+            android:id="@+id/btn_backToAccount"
             android:layout_width="122dp"
             android:layout_height="45dp"
             android:layout_marginLeft="280dp"
             android:layout_marginTop="32.5dp"
             android:backgroundTint="#4CAF50"
-            android:text="GUIDEBOOK"
+            android:text="@string/btn_desc"
             android:textSize="12sp"
             app:cornerRadius="@dimen/border_radius" />
     </androidx.cardview.widget.CardView>

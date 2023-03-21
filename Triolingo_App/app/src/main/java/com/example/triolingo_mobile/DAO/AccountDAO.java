@@ -46,7 +46,7 @@ public class AccountDAO extends DbContext {
     }
 
     public boolean registerAccount (AccountModel acc) {
-        String sql = "INSERT INTO " + DB_TABLE_NAME + " VALUES ('" + acc.getFullName() + "', '" +
+        String sql = "INSERT INTO " + DB_TABLE_NAME + " VALUES (N'" + acc.getFullName() + "', '" +
                                     acc.getEmail() + "', '" + acc.getPassword() + "', " + (acc.getAvatarUrl() == null ? "null" : "'" + acc.getAvatarUrl() + "'") +
                                     ", " + acc.getStatus() + ", " + (acc.getNote() == null ? "null" : "'" + acc.getNote() + "'") + ")";
         try {

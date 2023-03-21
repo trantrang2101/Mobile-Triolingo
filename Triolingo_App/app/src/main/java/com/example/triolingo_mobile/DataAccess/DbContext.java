@@ -40,7 +40,7 @@ public class DbContext {
     }
 
     public Connection ConnectionClass() {
-        ip = "192.168.1.28";
+        ip = "172.20.10.3";
         database = "TriolingoDatabase";
         username = "sa1";
         pass = "123456";

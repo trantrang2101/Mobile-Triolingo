@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.triolingo_mobile.Course.CourseDescriptionActivity;
+import com.example.triolingo_mobile.Course.ListCoursesActivity;
 import com.example.triolingo_mobile.DAO.LessonDAO;
 import com.example.triolingo_mobile.DAO.StudentCourseDAO;
 import com.example.triolingo_mobile.DAO.StudentLessonDAO;
@@ -73,16 +74,22 @@ public class UnitHolder extends RecyclerView.ViewHolder {
             UserEntity userLogin = gson.fromJson(json, UserEntity.class);
             userId = userLogin.getId();
         }
-        StudentCourse studentCourse = StudentCourseDAO.getInstance().getList("StudentId="+userId+" AND CourseId="+unit.getCourseId()).get(0);
+        List<StudentCourse> listStudentCourse = StudentCourseDAO.getInstance().getList("StudentId="+userId+" AND CourseId="+unit.getCourseId());
+        if(listStudentCourse.size()==0){
+            Intent intent = new Intent(context, ListCoursesActivity.class);
+            itemView.getContext().startActivity(intent);
+            return;
+        }
+        StudentCourse studentCourse = listStudentCourse.get(0);
         List<StudentLesson> list = StudentLessonDAO.getInstance().getList("LessionId in (select id from [Lesson] Where [UnitId]="+unit.getId()+") AND StudentCourseId ="+studentCourse.getId());
         List<LessonModel> listResult = LessonDAO.getInstance().getList("Status>0 AND UnitId="+unit.getId());
-        listResult.get(0).setPreviousActived(true);
+        listResult.get(0).setPreviousActived(list.size()>0);
         for (int i = 0; i< listResult.size();i++) {
             int index= list.stream().map(StudentLesson::getLessonId).collect(Collectors.toList()).indexOf(listResult.get(i).getId());
-            listResult.get(i).setUserMark(index!=-1?list.get(index).getMark():-1);
+            listResult.get(i).setUserMark(index!=-1?list.get(index).getMark():listResult.get(i).isPreviousActived()?-100:-1);
             listResult.get(i).setStudentCourse(studentCourse.getId());
-            if(i<listResult.size()-1){
-                listResult.get(i+1).setPreviousActived(index!=-1);
+            if(i<listResult.size()-1&&index!=-1){
+                listResult.get(i+1).setPreviousActived(true);
             }
         }
         LessonAdapter adapter = new LessonAdapter(listResult,list_lesson);

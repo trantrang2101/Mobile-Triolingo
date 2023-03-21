@@ -72,7 +72,6 @@ public class LoginActivity extends AppCompatActivity {
                         LoginBtn.setEnabled(true);
                         LoginBtn.setBackgroundColor(Color.BLUE);
                         LoginBtn.setTextColor(Color.parseColor("#FFFFFF"));
-
                     } else {
                         LoginBtn.setEnabled(false);
                         LoginBtn.setBackgroundColor(Color.parseColor(("#5E756969")));

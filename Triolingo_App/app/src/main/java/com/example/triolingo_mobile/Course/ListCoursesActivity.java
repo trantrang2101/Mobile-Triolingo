@@ -6,15 +6,18 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.triolingo_mobile.API.APICourse;
 import com.example.triolingo_mobile.API.RetrofitClient;
+import com.example.triolingo_mobile.AccountActivity;
 import com.example.triolingo_mobile.DAO.CourseDAO;
 import com.example.triolingo_mobile.DAO.StudentCourseDAO;
 import com.example.triolingo_mobile.DataAccess.DbContext;
@@ -59,6 +62,13 @@ public class ListCoursesActivity extends AppCompatActivity {
                 UserEntity userLogin = gson.fromJson(json, UserEntity.class);
                 userId = userLogin.getId();
             }
+            (findViewById(R.id.btn_backToAccount)).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(ListCoursesActivity.this, AccountActivity.class);
+                    startActivity(intent);
+                }
+            });
             List<Integer> list = StudentCourseDAO.getInstance().getList("StudentId="+userId).stream().map(StudentCourse::getCourseId).collect(Collectors.toList());
             List<Course> listResult = CourseDAO.getInstance().getList("Status>0");
             for (Course cour: listResult) {
